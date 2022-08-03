@@ -7,6 +7,6 @@ module.exports = {
   theme: {
     extend: {},
   },
-  darkMode: "media", //default value is "media" & "class" is allowed us to change darkmode manualy
-  plugins: [],
+  darkMode: "media",
+  plugins: [require("@tailwindcss/forms")],
 };
