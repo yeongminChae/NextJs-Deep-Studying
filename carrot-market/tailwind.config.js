@@ -7,5 +7,6 @@ module.exports = {
   theme: {
     extend: {},
   },
+  darkMode: "medai", //default value is "media" & "class" is allowed us to change darkmode manualy
   plugins: [],
 };
