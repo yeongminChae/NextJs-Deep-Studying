@@ -4,11 +4,11 @@ import Layout from "../components/layout";
 const Home: NextPage = () => {
   return (
     <Layout title="Home" hasTabBar>
-      <div className="flex flex-col space-y-5">
+      <div className="flex flex-col space-y-5 divide-y">
         {[...Array(10)].map((_, i) => (
           <div
             key={i}
-            className="flex border-b pb-4 px-4 cursor-pointer justify-between "
+            className="flex pt-5 px-4 cursor-pointer justify-between "
           >
             <div className="flex space-x-4">
               <div className="w-20 h-20 bg-gray-400 rounded-md " />
@@ -58,7 +58,7 @@ const Home: NextPage = () => {
             </div>
           </div>
         ))}
-        <button className="fixed cursor-pointer hover:bg-orange-400 transition-colors  bottom-16 right-5 bg-orange-500 rounded-full p-4 text-white shadow-xl">
+        <button className="fixed cursor-pointer hover:bg-orange-400 transition-colors bottom-24 right-5 bg-orange-500 rounded-full p-4 text-white shadow-xl">
           <svg
             className="h-6 w-6"
             xmlns="http://www.w3.org/2000/svg"
