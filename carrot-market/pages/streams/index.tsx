@@ -6,7 +6,7 @@ const Live: NextPage = () => {
       {[...Array(5)].map((_, i) => (
         <div key={i} className="pt-4 px-4">
           <div className="w-full bg-slate-300 aspect-video rounded-md shadow-sm  " />
-          <h3 className="text-gray-700 text-lg mt-2 ">Let's try potatos</h3>
+          <h3 className="text-gray-700 text-2xl mt-2 font-bold ">Galaxy S50</h3>
         </div>
       ))}
       <button className="fixed cursor-pointer hover:bg-orange-400 transition-colors  bottom-16 right-5 bg-orange-500 rounded-full p-4 text-white shadow-xl">
