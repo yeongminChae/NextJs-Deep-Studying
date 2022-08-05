@@ -25,7 +25,7 @@ export default function Layout({
       <div
         className={cls(
           !canGoBack ? "justify-center" : "",
-          "bg-white w-full text-lg font-medium max-w-xl py-3 fixed text-gray-700 border-b top-0 flex items-center px-5"
+          "bg-white w-full text-lg font-medium max-w-lg py-3 fixed text-gray-700 border-b top-0 flex items-center px-5"
         )}
       >
         {canGoBack ? (
@@ -50,7 +50,7 @@ export default function Layout({
       </div>
       <div className={cls("pt-12", hasTabBar ? "pb-24" : "")}>{children}</div>
       {hasTabBar ? (
-        <nav className="bg-white text-gray-700 border-t max-w-xl fixed w-full bottom-0 px-10 pb-5 pt-3 flex justify-between text-xs ">
+        <nav className="bg-white text-gray-700 border-t max-w-lg fixed w-full bottom-0 px-10 pb-5 pt-3 flex justify-between text-xs ">
           <Link href="/">
             <a className="flex flex-col items-center space-y-2">
               <svg

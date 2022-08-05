@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import Link from "next/link";
 import Layout from "../../components/layout";
 
 const ItemDetail: NextPage = () => {
@@ -11,9 +12,11 @@ const ItemDetail: NextPage = () => {
             <div className="w-12 h-12 rounded-full bg-slate-300" />
             <div>
               <p className="text-sm font-medium text-gray-700">Steve Jebs</p>{" "}
-              <p className="text-xs font-medium text-gray-500">
-                View profile &rarr;
-              </p>
+              <Link href="/profile">
+                <p className="text-xs font-medium cursor-pointer text-gray-500">
+                  View profile &rarr;
+                </p>
+              </Link>
             </div>
           </div>
           <div className="mt-10">

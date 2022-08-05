@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import Link from "next/link";
 import Layout from "../components/layout";
 
 const Home: NextPage = () => {
@@ -13,9 +14,11 @@ const Home: NextPage = () => {
             <div className="flex space-x-4">
               <div className="w-20 h-20 bg-gray-400 rounded-md " />
               <div className="pt-2 flex flex-col ">
-                <h3 className="text-sm font-medium text-gray-900">
-                  New iPhone 14
-                </h3>
+                <Link href="/items/$`[id]`">
+                  <h3 className="text-sm font-medium text-gray-900">
+                    New iPhone 14
+                  </h3>
+                </Link>
                 <span className="text-xs text-gray-500">Black</span>
                 <span className="font-medium mt-1 text-gray-900 ">$95</span>
               </div>
@@ -58,23 +61,25 @@ const Home: NextPage = () => {
             </div>
           </div>
         ))}
-        <button className="fixed cursor-pointer hover:bg-orange-400 transition-colors bottom-24 right-5 bg-orange-500 rounded-full p-4 text-white shadow-xl">
-          <svg
-            className="h-6 w-6"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-            />
-          </svg>
-        </button>
+        <Link href="/items/upload">
+          <button className="fixed cursor-pointer hover:bg-orange-400 transition-colors bottom-24 right-5 bg-orange-500 rounded-full p-4 text-white shadow-xl">
+            <svg
+              className="h-6 w-6"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              />
+            </svg>
+          </button>
+        </Link>
       </div>
     </Layout>
   );
