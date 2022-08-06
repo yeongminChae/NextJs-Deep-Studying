@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import Layout from "../../components/layout";
+import Button from "../../components/button";
 
 const EditPriofile: NextPage = () => {
   return (
@@ -51,9 +52,7 @@ const EditPriofile: NextPage = () => {
             />
           </div>
         </div>
-        <button className="mt-6 bg-orange-500 hover:bg-orange-600 text-white py-2 px-3 border border-transparent rounded-md shadow-sm text-sm font-medium focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:outline-none w-full">
-          Update Profile
-        </button>
+        <Button text="Update Profile" />
       </div>
     </Layout>
   );
