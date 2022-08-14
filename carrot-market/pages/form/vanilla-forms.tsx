@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 export default function Forms() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -35,7 +36,6 @@ export default function Forms() {
   };
   return (
     <form onSubmit={onSubmit}>
-      {" "}
       <input
         value={username}
         onChange={onUsernameChange}
@@ -43,23 +43,23 @@ export default function Forms() {
         placeholder="Username"
         required
         minLength={5}
-      />{" "}
+      />
       <input
         value={email}
         onChange={onEmailChange}
         type="email"
         placeholder="Email"
         required
-      />{" "}
-      {emailError}{" "}
+      />
+      {emailError}
       <input
         value={password}
         onChange={onPasswordChange}
         type="password"
         placeholder="Password"
         required
-      />{" "}
-      <input type="submit" value="Create Account" />{" "}
+      />
+      <input type="submit" value="Create Account" />
     </form>
   );
 }
