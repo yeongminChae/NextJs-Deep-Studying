@@ -3,11 +3,27 @@ import { cls } from "../libs/utils";
 import Button from "../components/button";
 import Input from "../components/input";
 import { NextPage } from "next";
+import { useForm } from "react-hook-form";
+
+interface EnterForm {
+  email?: string;
+  nunber?: string;
+}
 
 const Enter: NextPage = () => {
+  const { register, watch, reset, handleSubmit } = useForm();
   const [method, setMethod] = useState<"email" | "phone">("email");
-  const onEmailClick = () => setMethod("email");
-  const onPhoneClick = () => setMethod("phone");
+  const onEmailClick = () => {
+    reset();
+    setMethod("email");
+  };
+  const onPhoneClick = () => {
+    reset();
+    setMethod("phone");
+  };
+  const onValid = (data: EnterForm) => {
+    console.log(data);
+  };
   return (
     <div className="mt-10 px-4">
       <h3 className="text-3xl font-bold text-center">Enter to Carrot</h3>
@@ -39,13 +55,22 @@ const Enter: NextPage = () => {
             </button>
           </div>
         </div>
-        <form className="flex flex-col mt-8">
+        <form onSubmit={handleSubmit(onValid)} className="flex flex-col mt-8">
           <label htmlFor="input" className="text-sm font-medium text-gray-700">
             {method === "email" ? (
-              <Input name="email" label="Email address" type="email" required />
+              <Input
+                register={register("email", {
+                  required: true,
+                })}
+                name="email"
+                label="Email address"
+                type="email"
+                required
+              />
             ) : null}
             {method === "phone" ? (
               <Input
+                register={register("phone")}
                 name="phone"
                 label="Phone number"
                 type="number"
@@ -54,21 +79,6 @@ const Enter: NextPage = () => {
               />
             ) : null}
           </label>
-          <div className="mt-1">
-            {method === "email" ? (
-              <input
-                id="input"
-                type="email"
-                className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500  "
-                required
-              />
-            ) : null}
-            {method === "phone" ? (
-              <div>
-                <input id="input" type="number" required placeholder="" />
-              </div>
-            ) : null}
-          </div>
           {method === "email" ? <Button text={"Get login link"} /> : null}
           {method === "phone" ? (
             <Button text={"Get one-time password"} />
