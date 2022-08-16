@@ -4,7 +4,7 @@ import Button from "../components/button";
 import Input from "../components/input";
 import { NextPage } from "next";
 import { useForm } from "react-hook-form";
-import useMutation from "../libs/server/useMutation";
+import useMutation from "../libs/cleint/useMutation";
 
 interface EnterForm {
   email?: string;
@@ -13,7 +13,6 @@ interface EnterForm {
 
 const Enter: NextPage = () => {
   const [enter, { loading, data, error }] = useMutation("/api/users/enter");
-  const [submitting, setSubmitting] = useState(false);
   const { register, watch, reset, handleSubmit } = useForm();
   const [method, setMethod] = useState<"email" | "phone">("email");
   const onEmailClick = () => {
@@ -24,8 +23,9 @@ const Enter: NextPage = () => {
     reset();
     setMethod("phone");
   };
-  const onValid = (data: EnterForm) => {
-    enter(data);
+  const onValid = (validForm: EnterForm) => {
+    if (loading) return;
+    enter(validForm);
   };
   return (
     <div className="mt-10 px-4">
@@ -82,9 +82,11 @@ const Enter: NextPage = () => {
               />
             ) : null}
           </label>
-          {method === "email" ? <Button text={"Get login link"} /> : null}
+          {method === "email" ? (
+            <Button text={loading ? "LOADING" : "Get login link"} />
+          ) : null}
           {method === "phone" ? (
-            <Button text={submitting ? "LOADING" : "Get one-time password"} />
+            <Button text={loading ? "LOADING" : "Get one-time password"} />
           ) : null}
         </form>
         <div className="mt-8">
