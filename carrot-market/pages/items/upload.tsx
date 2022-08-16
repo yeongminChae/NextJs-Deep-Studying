@@ -1,15 +1,15 @@
 import type { NextPage } from "next";
-import Button from "../../components/button";
-import Layout from "../../components/layout";
-import TextArea from "../../components/textarea";
-import Input from "../../components/input";
+import Button from "@components/button";
+import Input from "@components/input";
+import Layout from "@components/layout";
+import TextArea from "@components/textarea";
 
 const Upload: NextPage = () => {
   return (
-    <Layout canGoBack>
-      <form className="px-4 py-10 space-y-5">
+    <Layout canGoBack title="Upload Product">
+      <form className="p-4 space-y-4">
         <div>
-          <label className="text-gray-600 hover:text-orange-500 hover:border-orange-500 cursor-pointer  w-full flex items-center justify-center border-2 border-dashed border-gray-300 h-48 rounded-md">
+          <label className="w-full cursor-pointer text-gray-600 hover:border-orange-500 hover:text-orange-500 flex items-center justify-center border-2 border-dashed border-gray-300 h-48 rounded-md">
             <svg
               className="h-12 w-12"
               stroke="currentColor"
@@ -31,13 +31,13 @@ const Upload: NextPage = () => {
         <Input
           required
           label="Price"
-          name="price"
           placeholder="0.00"
+          name="price"
           type="text"
           kind="price"
         />
         <TextArea name="description" label="Description" />
-        <Button text="Upload Item" />
+        <Button text="Upload item" />
       </form>
     </Layout>
   );

@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { cls } from "../libs/cleint/utils";
-import Button from "../components/button";
-import Input from "../components/input";
 import { NextPage } from "next";
 import { useForm } from "react-hook-form";
-import useMutation from "../libs/cleint/useMutation";
+import { cls } from "@libs/cleint/utils";
+import Button from "@components/button";
+import Input from "@components/input";
+import useMutation from "@libs/cleint/useMutation";
 
 interface EnterForm {
   email?: string;

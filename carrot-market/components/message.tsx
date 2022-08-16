@@ -1,4 +1,4 @@
-import { cls } from "../libs/cleint/utils";
+import { cls } from "@libs/cleint/utils";
 
 interface IMessage {
   message: string;

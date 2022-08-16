@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
-import FloatingBtn from "../components/floating-btn";
-import Layout from "../components/layout";
-import Item from "../components/item";
-// import "../libs/client" -> my backend db should not allow to access in front-end
+import FloatingBtn from "@components/floating-btn";
+import Layout from "@components/layout";
+import Item from "@components/item";
+// import "@libs/client" -> my backend db should not allow to access in front-end
 
 const Home: NextPage = () => {
   return (

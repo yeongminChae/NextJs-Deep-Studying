@@ -1,13 +1,13 @@
 import type { NextPage } from "next";
-import Layout from "../../components/layout";
-import Button from "../../components/button";
-import TextArea from "../../components/textarea";
-import Input from "../../components/input";
+import Button from "@components/button";
+import Input from "@components/input";
+import Layout from "@components/layout";
+import TextArea from "@components/textarea";
 
-const Upload: NextPage = () => {
+const Create: NextPage = () => {
   return (
-    <Layout canGoBack>
-      <form className="px-4 py-10 space-y-5">
+    <Layout canGoBack title="Go Live">
+      <form className=" space-y-4 py-10 px-4">
         <Input required label="Name" name="name" type="text" />
         <Input
           required
@@ -18,10 +18,10 @@ const Upload: NextPage = () => {
           placeholder="0.00"
         />
         <TextArea name="description" label="Description" />
-        <Button text="Live Start" />
+        <Button text="Go live" />
       </form>
     </Layout>
   );
 };
 
-export default Upload;
+export default Create;
