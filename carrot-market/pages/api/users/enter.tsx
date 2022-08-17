@@ -31,34 +31,34 @@ async function handler(
     },
   });
   if (phone) {
-    const message = await twilioClient.messages.create({
-      messagingServiceSid: process.env.TWILIO_MSID,
-      to: process.env.PHONE_NUM!, // PHONE_NUM! -> it's for sure that is exist in env
-      body: `your login token is ${payload}.`,
-    });
-    console.log(message);
+    // const message = await twilioClient.messages.create({
+    //   messagingServiceSid: process.env.TWILIO_MSID,
+    //   to: process.env.PHONE_NUM!, // PHONE_NUM! -> it's for sure that is exist in env
+    //   body: `your login token is ${payload}.`,
+    // });
+    // console.log(message);
   } else if (email) {
-    const mailOption = {
-      from: process.env.MAIL_ID,
-      to: email,
-      subject: "Nomad Carrot Authentication Email",
-      text: `Authentication Code : ${payload}`,
-      html: "<strong>Authentication Code : ${payload}",
-    };
-    const result = await smtpTransport.sendMail(
-      mailOption,
-      (error, response) => {
-        if (error) {
-          console.log(error);
-          return null;
-        } else {
-          console.log(response);
-          return null;
-        }
-      }
-    );
-    smtpTransport.close();
-    console.log(result);
+    // const mailOption = {
+    //   from: process.env.MAIL_ID,
+    //   to: email,
+    //   subject: "Nomad Carrot Authentication Email",
+    //   text: `Authentication Code : ${payload}`,
+    //   html: "<strong>Authentication Code : ${payload}",
+    // };
+    // const result = await smtpTransport.sendMail(
+    //   mailOption,
+    //   (error, response) => {
+    //     if (error) {
+    //       console.log(error);
+    //       return null;
+    //     } else {
+    //       console.log(response);
+    //       return null;
+    //     }
+    //   }
+    // );
+    // smtpTransport.close();
+    // console.log(result);
   }
   return res.json({
     ok: true,
