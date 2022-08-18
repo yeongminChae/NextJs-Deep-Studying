@@ -32,20 +32,20 @@ async function handler(
     },
   });
   if (phone) {
-    const message = await twilioClient.messages.create({
-      messagingServiceSid: process.env.TWILIO_MSID,
-      to: process.env.PHONE_NUM!, // PHONE_NUM! -> it's for sure that is exist in env
-      body: `your login token is ${payload}.`,
-    });
-    console.log(message);
+    // const message = await twilioClient.messages.create({
+    //   messagingServiceSid: process.env.TWILIO_MSID,
+    //   to: process.env.PHONE_NUM!, // PHONE_NUM! -> it's for sure that is exist in env
+    //   body: `your login token is ${payload}.`,
+    // });
+    // console.log(message);
   } else if (email) {
-    const email = await mail.send({
-      from: "codudals98@naver.com",
-      to: "codudals98@naver.com",
-      subject: "Your Carrot market verificationl email",
-      text: `Your tokem is ${payload} `,
-      html: `<strong>Your tokem is ${payload}</strong> `,
-    });
+    // const email = await mail.send({
+    //   from: "codudals98@naver.com",
+    //   to: "codudals98@naver.com",
+    //   subject: "Your Carrot market verificationl email",
+    //   text: `Your tokem is ${payload} `,
+    //   html: `<strong>Your tokem is ${payload}</strong> `,
+    // });
   }
   return res.json({
     ok: true,
