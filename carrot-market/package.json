@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@prisma/client": "^4.2.1",
+    "@sendgrid/mail": "^7.7.0",
     "@types/nodemailer": "^6.4.5",
     "next": "12.2.3",
     "nodemailer": "^6.7.8",
