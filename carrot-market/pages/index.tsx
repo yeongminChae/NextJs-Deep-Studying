@@ -4,10 +4,9 @@ import Layout from "@components/layout";
 import Item from "@components/item";
 import useUser from "@libs/cleint/useUser";
 import Head from "next/head";
-// import "@libs/client" -> my backend db should not allow to access in front-end
 
 const Home: NextPage = () => {
-  const user = useUser();
+  const { user, isLoading } = useUser();
   console.log(user);
   return (
     <Layout title="Home" hasTabBar>
