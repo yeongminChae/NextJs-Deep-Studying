@@ -2,11 +2,18 @@ import type { NextPage } from "next";
 import FloatingBtn from "@components/floating-btn";
 import Layout from "@components/layout";
 import Item from "@components/item";
+import useUser from "@libs/cleint/useUser";
+import Head from "next/head";
 // import "@libs/client" -> my backend db should not allow to access in front-end
 
 const Home: NextPage = () => {
+  const user = useUser();
+  console.log(user);
   return (
     <Layout title="Home" hasTabBar>
+      <Head>
+        <title>Hone</title>
+      </Head>
       <div className="flex flex-col space-y-5 divide-y">
         {[...Array(10)].map((_, i) => (
           <Item
