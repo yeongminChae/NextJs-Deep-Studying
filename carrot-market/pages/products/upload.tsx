@@ -4,7 +4,9 @@ import Input from "@components/input";
 import Layout from "@components/layout";
 import TextArea from "@components/textarea";
 import { useForm } from "react-hook-form";
-import { useMemo } from "react";
+import { useEffect } from "react";
+import { Product } from "@prisma/client";
+import { useRouter } from "next/router";
 import useMutation from "@libs/cleint/useMutation";
 
 interface UploadProductForm {
@@ -13,13 +15,25 @@ interface UploadProductForm {
   description: string;
 }
 
+interface UploadProductMutation {
+  ok: boolean;
+  product: Product;
+}
+
 const Upload: NextPage = () => {
+  const router = useRouter();
   const { register, handleSubmit } = useForm<UploadProductForm>();
-  const [uploadProduct, { loading, data }] = useMutation("/api/products");
+  const [uploadProduct, { loading, data }] =
+    useMutation<UploadProductMutation>("/api/products");
   const onValid = (data: UploadProductForm) => {
-    if (!loading) return;
+    if (loading) return;
     uploadProduct(data);
   };
+  useEffect(() => {
+    if (data?.ok) {
+      router.replace(`/products/${data.product.id}`);
+    }
+  }, [data, router]);
   return (
     <Layout canGoBack title="Upload Product">
       <form className="p-4 space-y-4" onSubmit={handleSubmit(onValid)}>
@@ -53,18 +67,17 @@ const Upload: NextPage = () => {
           register={register("price", { required: true })}
           required
           label="Price"
-          placeholder="0.00"
           name="price"
           type="text"
           kind="price"
         />
         <TextArea
-          required
           register={register("description", { required: true })}
           name="description"
           label="Description"
+          required
         />
-        <Button text={loading ? "LOADING" : "Upload item"} />
+        <Button text={loading ? "Loading..." : "Upload item"} />
       </form>
     </Layout>
   );
