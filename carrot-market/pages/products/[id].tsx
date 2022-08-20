@@ -7,7 +7,7 @@ import Link from "next/link";
 import { Product, User } from "@prisma/client";
 
 interface ProductWithUser extends Product {
-  user: User;
+  User: User;
 }
 interface ItemDetailResponse {
   ok: boolean;
@@ -29,10 +29,10 @@ const ItemDetail: NextPage = () => {
             <div className="w-12 h-12 rounded-full bg-slate-300" />
             <div>
               <p className="text-sm font-medium text-gray-700">
-                {data?.product?.user?.name}
+                {data?.product?.User?.name}
               </p>
-              <Link href={`/users/profiles/${data?.product?.user?.id}`}>
-                <a className="text-xs font-medium text-gray-500">
+              <Link href={`/users/profiles/${data?.product?.User?.id}`}>
+                <a className="text-xs font-medium text-gray-500 cursor-pointer">
                   View profile &rarr;
                 </a>
               </Link>
@@ -71,10 +71,16 @@ const ItemDetail: NextPage = () => {
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Similar items</h2>
           <div className=" mt-6 grid grid-cols-2 gap-4">
-            {data?.relatedProducts.map((product) => (
+            {data?.relatedProducts?.map((product) => (
               <div key={product.id}>
-                <div className="h-56 w-full mb-4 bg-slate-300" />
-                <h3 className="text-gray-700 -mb-1">{product.name}</h3>
+                <Link href={`/products/${product.id}`}>
+                  <div className="h-56 w-full mb-4 bg-slate-300 cursor-pointer" />
+                </Link>
+                <Link href={`/products/${product.id}`}>
+                  <h3 className="cursor-pointer text-gray-700 -mb-1">
+                    {product.name}
+                  </h3>
+                </Link>
                 <span className="text-sm font-medium text-gray-900">
                   ${product.price}
                 </span>
