@@ -6,11 +6,12 @@ import useUser from "@libs/cleint/useUser";
 import Head from "next/head";
 import useSWR from "swr";
 import products from "./api/products";
-import { Product } from "@prisma/client";
+import { Product, User } from "@prisma/client";
 
 interface ProductResponse {
   ok: boolean;
   products: Product[];
+  _count: number;
 }
 
 const Home: NextPage = () => {
@@ -28,9 +29,7 @@ const Home: NextPage = () => {
             id={product.id}
             title={product.name}
             price={product.price}
-            comments={1}
-            hearts={1}
-            props="black"
+            hearts={product._count.favs}
           />
         ))}
         <FloatingBtn href="/products/upload">

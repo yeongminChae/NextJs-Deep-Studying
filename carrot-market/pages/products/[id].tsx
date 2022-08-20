@@ -20,7 +20,7 @@ interface ItemDetailResponse {
 
 const ItemDetail: NextPage = () => {
   const router = useRouter();
-  const { mutate } = useSWRConfig();
+  // const { mutate } = useSWRConfig();
   const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(
     router.query.id ? `/api/products/${router.query.id}` : null
   );
@@ -28,8 +28,7 @@ const ItemDetail: NextPage = () => {
   const onFavClick = () => {
     if (!data) return;
     boundMutate({ ...data, isLiked: !data.isLiked }, false);
-    mutate("/api/users/me", (prev: any) => ({ ok: !prev.ok }), false);
-    // toggleFav({});
+    toggleFav({});
   };
   return (
     <Layout canGoBack>
