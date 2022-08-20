@@ -5,13 +5,17 @@ import Item from "@components/item";
 import useUser from "@libs/cleint/useUser";
 import Head from "next/head";
 import useSWR from "swr";
-import products from "./api/products";
 import { Product, User } from "@prisma/client";
+
+interface ProductWithUser extends Product {
+  _count: {
+    favs: number;
+  };
+}
 
 interface ProductResponse {
   ok: boolean;
-  products: Product[];
-  _count: number;
+  products: ProductWithUser[];
 }
 
 const Home: NextPage = () => {

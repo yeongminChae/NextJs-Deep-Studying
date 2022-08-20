@@ -18,15 +18,12 @@ async function handler(
     },
   });
   if (alreadyExists) {
-    // delete
     await client.fav.delete({
-      // i can use delete function when value is unique
       where: {
         id: alreadyExists.id,
       },
     });
   } else {
-    // create
     await client.fav.create({
       data: {
         user: {
