@@ -91,7 +91,7 @@ const CommunityPostDetail: NextPage = () => {
           <div className="w-10 h-10 rounded-full bg-slate-300" />
           <div>
             <p className="text-sm font-medium text-gray-700">
-              {data?.post.user.name}
+              {data?.post?.user?.name}
             </p>
             <Link href={`/users/profiles/${data?.post?.user?.id}`}>
               <a className="text-xs font-medium text-gray-500">
@@ -127,7 +127,7 @@ const CommunityPostDetail: NextPage = () => {
                   d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                 ></path>
               </svg>
-              <span>궁금해요 {data?.post._count.wonderings}</span>
+              <span>궁금해요 {data?.post?._count.wonderings}</span>
             </button>
             <span className="flex space-x-2 items-center text-sm">
               <svg
