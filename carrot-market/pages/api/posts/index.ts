@@ -11,7 +11,6 @@ async function handler(
     const {
       body: { question, latitude, longitude },
       session: { user },
-      // query:{latitude, longitude },
     } = req;
     const post = await client.post.create({
       data: {
