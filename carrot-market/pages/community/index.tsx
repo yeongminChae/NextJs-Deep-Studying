@@ -5,6 +5,7 @@ import Layout from "@components/layout";
 import useSWR from "swr";
 import { Post, User } from "@prisma/client";
 import useCoords from "@libs/cleint/useCoords";
+import Button from "@components/button";
 
 interface PostWithUser extends Post {
   user: User;
@@ -83,6 +84,11 @@ const Community: NextPage = () => {
             </a>
           </Link>
         ))}
+        {data?.posts.length === 0 && (
+          <div className="my-2 text-red-500 font-medium flex-col flex justify-center text-center">
+            We cannot find anything around your area.
+          </div>
+        )}
         <FloatingButton href="/community/write">
           <svg
             className="w-6 h-6"

@@ -100,7 +100,7 @@ const EditPriofile: NextPage = () => {
         />
         {errors.formErrors ? (
           <span className="my-2 text-red-500 font-medium text-center  block">
-            {errors.formErrors.message}{" "}
+            {errors.formErrors.message}
           </span>
         ) : null}
         <Button text={loading ? "Loading..." : "Update profile"} />
