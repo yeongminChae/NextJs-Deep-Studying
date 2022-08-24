@@ -100,6 +100,11 @@ model Review {
   createdById  Int
   createdFor   User     @relation(name: "receivedReview", fields: [createdForId], references: [id], onDelete: Cascade)
   createdForId Int
+  score        Int      @default(1)
+  // ⚠️ We found changes that cannot be executed:
+  //  • Added the required column `score` to the `Review` table without a default value. There are 1 rows in this table, it is not possible to execute this step.
+  // it happened when we try to modify the db which already existed.
+  // so for fixing this case that u can make score optional or set the defualt valuse 
 }
 
 model Fav {
