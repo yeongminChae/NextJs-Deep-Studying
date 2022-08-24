@@ -5,15 +5,24 @@ import useUser from "@libs/cleint/useUser";
 import { useForm } from "react-hook-form";
 import Input from "@components/input";
 import { useEffect } from "react";
+import useMutation from "@libs/cleint/useMutation";
+import Router, { useRouter } from "next/router";
 
 interface EditPriofile {
   email?: string;
   phone?: string;
+  name?: string;
   formErrors?: string;
+}
+
+interface EditPriofileResponse {
+  ok: boolean;
+  error?: string;
 }
 
 const EditPriofile: NextPage = () => {
   const { user } = useUser();
+  const router = useRouter();
   const {
     register,
     setValue,
@@ -22,16 +31,31 @@ const EditPriofile: NextPage = () => {
     formState: { errors },
   } = useForm<EditPriofile>();
   useEffect(() => {
+    if (user?.name) setValue("name", user.name);
     if (user?.email) setValue("email", user.email);
     if (user?.phone) setValue("phone", user.phone);
   }, [user, setValue]);
-  const onValid = ({ email, phone }: EditPriofile) => {
-    if (email === "" && phone === "") {
-      setError("formErrors", {
+  const [editProfile, { data, loading }] =
+    useMutation<EditPriofileResponse>(`/api/users/me`);
+  const onValid = ({ email, phone, name }: EditPriofile) => {
+    if (loading) return;
+    if (email === "" && phone === "" && name === "") {
+      return setError("formErrors", {
         message: "email or phone num is empty u need to put a value",
       });
     }
+    editProfile({ email, phone, name });
   };
+  useEffect(() => {
+    if (data && !data.ok && data.error) {
+      setError("formErrors", { message: data.error });
+    }
+  }, [data, setError]);
+  useEffect(() => {
+    if (data?.ok === true) {
+      router.push(`/profile`);
+    }
+  }, [data, router]);
   return (
     <Layout canGoBack>
       <form onSubmit={handleSubmit(onValid)} className="py-10 px-4 space-y-4">
@@ -54,6 +78,13 @@ const EditPriofile: NextPage = () => {
           </label>
         </div>
         <Input
+          register={register("name")}
+          required={false}
+          label="Name"
+          name="name"
+          type="text"
+        />
+        <Input
           register={register("email")}
           required={false}
           label="Email address"
@@ -66,14 +97,13 @@ const EditPriofile: NextPage = () => {
           label="Phone number"
           name="phone"
           type="number"
-          kind="phone"
         />
         {errors.formErrors ? (
           <span className="my-2 text-red-500 font-medium text-center  block">
             {errors.formErrors.message}{" "}
           </span>
         ) : null}
-        <Button text="Update profile" />
+        <Button text={loading ? "Loading..." : "Update profile"} />
       </form>
     </Layout>
   );
