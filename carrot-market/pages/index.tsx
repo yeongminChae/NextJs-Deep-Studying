@@ -24,7 +24,7 @@ const Home: NextPage = () => {
   return (
     <Layout title="Home" hasTabBar>
       <Head>
-        <title>Hone</title>
+        <title>Home</title>
       </Head>
       <div className="flex flex-col space-y-5 divide-y">
         {data?.products?.map((product) => (

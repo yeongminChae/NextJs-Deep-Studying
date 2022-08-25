@@ -1,19 +1,27 @@
 import type { NextPage } from "next";
 import Link from "next/link";
 import Layout from "@components/layout";
+import { Stream } from "@prisma/client";
+import useSWR from "swr";
 
-const Live: NextPage = () => {
+interface StreamsResponse {
+  ok: boolean;
+  streams: Stream[];
+}
+
+const Streams: NextPage = () => {
+  const { data } = useSWR<StreamsResponse>(`/api/streams`);
   return (
     <Layout hasTabBar title="Live Streaming">
       <div className="py-10 space-y-4 divide-y-2 ">
-        {[...Array(5)].map((_, i) => (
-          <div key={i} className="pt-4 px-4">
-            <Link href="/streams/$`[id]` ">
+        {data?.streams.map((stream) => (
+          <div key={stream.id} className="pt-4 px-4">
+            <Link href={`/streams/${stream.id} `}>
               <div className="w-full bg-slate-300 cursor-pointer aspect-video rounded-md shadow-sm  " />
             </Link>
-            <Link href="/streams/$`[id]` ">
+            <Link href={`/streams/${stream.id} `}>
               <h3 className="text-gray-700 text-2xl mt-2 font-bold cursor-pointer ">
-                Galaxy S50
+                {stream.name}
               </h3>
             </Link>
           </div>
@@ -41,4 +49,4 @@ const Live: NextPage = () => {
   );
 };
 
-export default Live;
+export default Streams;
