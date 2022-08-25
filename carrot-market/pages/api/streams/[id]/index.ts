@@ -10,7 +10,6 @@ async function handler(
   const {
     query: { id },
   } = req;
-
   const stream = await client.stream.findUnique({
     where: {
       id: +id.toString(),
