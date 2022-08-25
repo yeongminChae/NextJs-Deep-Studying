@@ -37,7 +37,10 @@ const Stream: NextPage = () => {
   const { user } = useUser();
   const { register, handleSubmit, reset } = useForm<MessageFrom>();
   const { data, mutate } = useSWR<StreamResponse>(
-    router.query.id ? `/api/streams/${router.query.id}` : null
+    router.query.id ? `/api/streams/${router.query.id}` : null,
+    {
+      refreshInterval: 1000,
+    }
   );
   const [sendMessage, { loading, data: sendMessageData }] = useMutation(
     `/api/streams/${router.query.id}/messages `
@@ -45,20 +48,36 @@ const Stream: NextPage = () => {
   const onValid = (form: MessageFrom) => {
     if (loading) return;
     reset();
+    mutate(
+      (prev) =>
+        prev &&
+        ({
+          ...prev,
+          stream: {
+            ...prev.stream,
+            messages: [
+              ...prev.stream.messages,
+              {
+                id: Date.now(),
+                message: form.message,
+                user: {
+                  ...user,
+                },
+              },
+            ],
+          },
+        } as any),
+      false
+    );
     sendMessage(form);
   };
-  useEffect(() => {
-    if (sendMessageData && sendMessageData.ok) {
-      mutate();
-    }
-  }, [mutate, sendMessageData]);
   return (
     <Layout canGoBack>
       <div className="py-10 px-4  space-y-4">
         <div className="w-full rounded-md shadow-sm bg-slate-300 aspect-video" />
         <div className="mt-5">
           <h1 className="text-3xl font-bold text-gray-900">
-            {data?.stream.name}
+            {data?.stream?.name}
           </h1>
           <span className="text-2xl block mt-3 text-gray-900">
             ${data?.stream?.price}
@@ -68,7 +87,7 @@ const Stream: NextPage = () => {
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Live Chat</h2>
           <div className="py-10 pb-16 h-[50vh] overflow-y-scroll  px-4 space-y-4">
-            {data?.stream.messages.map((message) => (
+            {data?.stream?.messages.map((message) => (
               <Message
                 key={message.id}
                 message={message.message}
