@@ -27,7 +27,7 @@ export default function Pagination({
     } else if (currentPage >= 51) {
       router.push(`/streams?page=51`);
     }
-  }, [router, currentPage, totalPages]);
+  }, [router, currentPage]);
   return (
     <div className="bg-white bottom-20 border-t fixed px-5 pt-3 flex items-center justify-between border-gray-200 sm:px-6  max-w-xl text-gray-700  w-full  pb-5   text-xs">
       <div className="sm:flex-1 flex sm:flex sm:items-center sm:justify-between">
@@ -84,26 +84,24 @@ export default function Pagination({
               </svg>
             </a>
             <a
-              href={`/streams?page=1`}
+              href={`/streams?page=${currentPage}`}
               aria-current="page"
               className="z-10 bg-orange hover:bg-orange-50 border-orange-300 text-orange-500 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
             >
-              1
+              {currentPage}
             </a>
-            <a
-              href={`/streams?page=3`}
-              className="bg-orange border-orange-300 text-orange-500 hover:bg-orange-50 hidden md:inline-flex relative items-center px-4 py-2 border text-sm font-medium"
+            <span
+              className={cls(
+                "relative inline-flex items-center px-4 py-2 border border-orange-300 bg-orange text-sm font-medium text-orange-700"
+              )}
             >
-              3
-            </a>
-            <span className="relative inline-flex items-center px-4 py-2 border border-orange-300 bg-orange text-sm font-medium text-orange-700">
               ...
             </span>
             <a
-              href="#"
+              href={`/streams?page=${currentPage + 4}`}
               className="bg-orange border-orange-300 text-orange-500 hover:bg-orange-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
             >
-              10
+              {currentPage + 4 <= 51 ? currentPage + 4 : totalResults}
             </a>
             <a
               href={`/streams?page=${page + 1} `}
