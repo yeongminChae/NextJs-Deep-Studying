@@ -24,10 +24,32 @@ async function handler(
         },
       },
     });
-    res.json({ ok: true, stream });
-  } else if (req.method === "GET") {
-    const streams = await client.stream.findMany();
-    res.json({ ok: true, streams });
+    res.json({
+      ok: true,
+      stream,
+    });
+  }
+  if (req.method === "GET") {
+    const streamPages = await client.stream.count();
+    const rowCnt = await client.stream.count({
+      select: {
+        _all: true,
+      },
+    });
+    let page =
+      req.query.page && req.query.page !== undefined
+        ? +req.query?.page?.toString()
+        : 1;
+    const streams = await client.stream.findMany({
+      take: 10,
+      skip: (+page - 1) * 10,
+    });
+    res.json({
+      ok: true,
+      streams,
+      rowCnt,
+      pages: Math.ceil(streamPages / 10),
+    });
   }
 }
 
@@ -35,5 +57,6 @@ export default withApiSession(
   withHandler({
     methods: ["GET", "POST"],
     handler,
+    isPrivate: false,
   })
 );

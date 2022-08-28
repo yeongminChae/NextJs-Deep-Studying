@@ -24,7 +24,7 @@ export default function Layout({
     <div>
       <div
         className={
-          "bg-white w-full max-w-lg justify-center h-12 text-lg px-10 font-medium py-3 fixed text-gray-800 border-b top-0  flex items-center"
+          "bg-white w-full max-w-lg justify-center h-12 text-lg px-10 font-medium py-3 fixed text-gray-800 border-b top-0 flex items-center"
         }
       >
         {canGoBack ? (
