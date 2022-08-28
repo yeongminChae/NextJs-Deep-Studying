@@ -21,6 +21,13 @@ export default function Pagination({
       setPage(+router.query?.page.toString());
     }
   }, [page, router]);
+  useEffect(() => {
+    if (currentPage <= 0) {
+      router.push(`/streams?page=1`);
+    } else if (currentPage >= 51) {
+      router.push(`/streams?page=51`);
+    }
+  }, [router, currentPage, totalPages]);
   return (
     <div className="bg-white bottom-20 border-t fixed px-5 pt-3 flex items-center justify-between border-gray-200 sm:px-6  max-w-xl text-gray-700  w-full  pb-5   text-xs">
       <div className="sm:flex-1 flex sm:flex sm:items-center sm:justify-between">
@@ -37,29 +44,51 @@ export default function Pagination({
             aria-label="Pagination"
           >
             <a
-              href={`/streams?page=${page - 1} `}
-              className={cls(
-                "relative inline-flex items-center px-2 hover:bg-orange-50 py-2 rounded-l-md border border-orange-300 bg-white text-sm font-medium text-orange-500 ",
-                router.pathname == `/streams?page=1` ? "disabled" : ""
-              )}
+              href={`/streams?page=${page - 5}`}
+              className="relative inline-flex items-center px-2 hover:bg-orange-50 py-2 rounded-l-md border border-orange-300 bg-white text-sm font-medium text-orange-500 "
             >
               <span className="sr-only">Previous</span>
-              <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5"
+                />
+              </svg>
             </a>
-            <div className="z-10 bg-orange border-orange-300 text-orange-500" />
-
+            <a
+              href={`/streams?page=${page - 1}`}
+              className="relative inline-flex items-center px-2 hover:bg-orange-50 py-2 border border-orange-300 bg-white text-sm font-medium text-orange-500 "
+            >
+              <span className="sr-only">Previous</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 19.5L8.25 12l7.5-7.5"
+                />
+              </svg>
+            </a>
             <a
               href={`/streams?page=1`}
               aria-current="page"
               className="z-10 bg-orange hover:bg-orange-50 border-orange-300 text-orange-500 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
             >
               1
-            </a>
-            <a
-              href={`/streams?page=2`}
-              className="bg-orange border-orange-300 text-orange-500 hover:bg-orange-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
-            >
-              2
             </a>
             <a
               href={`/streams?page=3`}
@@ -72,28 +101,49 @@ export default function Pagination({
             </span>
             <a
               href="#"
-              className="bg-orange border-orange-300 text-orange-500 hover:bg-orange-50 hidden md:inline-flex relative items-center px-4 py-2 border text-sm font-medium"
-            >
-              8
-            </a>
-            <a
-              href="#"
-              className="bg-orange border-orange-300 text-orange-500 hover:bg-orange-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
-            >
-              9
-            </a>
-            <a
-              href="#"
               className="bg-orange border-orange-300 text-orange-500 hover:bg-orange-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
             >
               10
             </a>
             <a
               href={`/streams?page=${page + 1} `}
+              className="relative hover:bg-orange-50 inline-flex items-center px-2 py-2 border border-orange-300 bg-white text-sm font-medium text-orange-500"
+            >
+              <span className="sr-only">Next Page</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                />
+              </svg>
+            </a>
+            <a
+              href={`/streams?page=${page + 5} `}
               className="relative hover:bg-orange-50 inline-flex items-center px-2 py-2 rounded-r-md border border-orange-300 bg-white text-sm font-medium text-orange-500"
             >
-              <span className="sr-only">Next</span>
-              <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+              <span className="sr-only">Next 5 Pages</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5"
+                />
+              </svg>
             </a>
           </nav>
         </div>
