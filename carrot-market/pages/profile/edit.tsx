@@ -4,15 +4,17 @@ import Button from "@components/button";
 import useUser from "@libs/cleint/useUser";
 import { useForm } from "react-hook-form";
 import Input from "@components/input";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useMutation from "@libs/cleint/useMutation";
 import Router, { useRouter } from "next/router";
+import useSWR from "swr";
 
 interface EditPriofile {
   email?: string;
   phone?: string;
   name?: string;
   formErrors?: string;
+  avatar?: FileList;
 }
 
 interface EditPriofileResponse {
@@ -29,6 +31,7 @@ const EditPriofile: NextPage = () => {
     handleSubmit,
     setError,
     formState: { errors },
+    watch,
   } = useForm<EditPriofile>();
   useEffect(() => {
     if (user?.name) setValue("name", user.name);
@@ -37,7 +40,7 @@ const EditPriofile: NextPage = () => {
   }, [user, setValue]);
   const [editProfile, { data, loading }] =
     useMutation<EditPriofileResponse>(`/api/users/me`);
-  const onValid = ({ email, phone, name }: EditPriofile) => {
+  const onValid = ({ email, phone, name, avatar }: EditPriofile) => {
     if (loading) return;
     if (email === "" && phone === "" && name === "") {
       return setError("formErrors", {
@@ -56,11 +59,23 @@ const EditPriofile: NextPage = () => {
       router.push(`/profile`);
     }
   }, [data, router]);
+  const [avatarPreview, setAvatarPreview] = useState("");
+  const avatar = watch("avatar");
+  useEffect(() => {
+    if (avatar && avatar.length > 0) {
+      const file = avatar[0];
+      setAvatarPreview(URL.createObjectURL(file));
+    }
+  }, [avatar]);
   return (
     <Layout canGoBack>
       <form onSubmit={handleSubmit(onValid)} className="py-10 px-4 space-y-4">
         <div className="flex items-center space-x-3">
-          <div className="w-14 h-14 rounded-full bg-slate-500" />
+          {avatarPreview ? (
+            <img src={avatarPreview} className="w-14 h-14 rounded-full" />
+          ) : (
+            <div className="w-14 h-14 rounded-full bg-slate-500" />
+          )}
           <label
             className="cursor-pointer py-2 px-3 
             border border-gray-300 rounded-md shadow-sm font-medium
@@ -70,6 +85,7 @@ const EditPriofile: NextPage = () => {
           >
             Change Photo
             <input
+              {...register("avatar")}
               id="picture"
               type="file"
               className="hidden"
