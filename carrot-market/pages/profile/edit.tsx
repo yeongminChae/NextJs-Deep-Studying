@@ -47,9 +47,14 @@ const EditPriofile: NextPage = () => {
         message: "email or phone num is empty u need to put a value",
       });
     }
-    if (avatar && avatar.length > 0) {
-      const cloudFlareRequest = await (await fetch(`/api/files`)).json();
-      console.log(cloudFlareRequest);
+    if (avatar && avatar.length > 0 && user) {
+      const { id, uploadURL } = await (await fetch(`/api/files`)).json();
+      const form = new FormData();
+      form.append("file", avatar[0], user?.id + "");
+      fetch(uploadURL, {
+        method: "POST",
+        body: form,
+      });
       return;
       editProfile({
         email,
