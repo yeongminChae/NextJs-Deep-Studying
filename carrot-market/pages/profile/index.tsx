@@ -30,7 +30,6 @@ const Profile: NextPage = () => {
           ) : (
             <div className="w-16 h-16 bg-slate-500 rounded-full" />
           )}
-
           <div className="flex flex-col">
             <span className="font-medium text-gray-900 ">{user?.name}</span>
             <Link href="/profile/edit">
