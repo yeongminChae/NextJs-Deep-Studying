@@ -40,14 +40,26 @@ const EditPriofile: NextPage = () => {
   }, [user, setValue]);
   const [editProfile, { data, loading }] =
     useMutation<EditPriofileResponse>(`/api/users/me`);
-  const onValid = ({ email, phone, name, avatar }: EditPriofile) => {
+  const onValid = async ({ email, phone, name, avatar }: EditPriofile) => {
     if (loading) return;
     if (email === "" && phone === "" && name === "") {
       return setError("formErrors", {
         message: "email or phone num is empty u need to put a value",
       });
     }
-    editProfile({ email, phone, name });
+    if (avatar && avatar.length > 0) {
+      const cloudFlareRequest = await (await fetch(`/api/files`)).json();
+      console.log(cloudFlareRequest);
+      return;
+      editProfile({
+        email,
+        phone,
+        name,
+        // avatarURL
+      });
+    } else {
+      editProfile({ email, phone, name });
+    }
   };
   useEffect(() => {
     if (data && !data.ok && data.error) {
