@@ -39,7 +39,7 @@ const EditPriofile: NextPage = () => {
     if (user?.phone) setValue("phone", user.phone);
     if (user?.avatar)
       setAvatarPreview(
-        `https://imagedelivery.net/V_VgYLYXooAb_-AJyJfp_Q/${user?.avatar}/public`
+        `https://imagedelivery.net/V_VgYLYXooAb_-AJyJfp_Q/${user?.avatar}/avatar`
       );
   }, [user, setValue]);
   const [editProfile, { data, loading }] =
