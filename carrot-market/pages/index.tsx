@@ -54,7 +54,7 @@ const Home: NextPage = () => {
             />
           </svg>
         </FloatingBtn>
-        <Image src={riceCake} placeholder="blur" quality={5} />
+        {/* <Image src={riceCake} placeholder="blur" quality={5} /> */}
       </div>
     </Layout>
   );
