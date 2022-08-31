@@ -33,21 +33,21 @@ const ItemDetail: NextPage = () => {
   };
   return (
     <Layout canGoBack>
-      <div className="px-4  py-4">
+      <div className="px-4 py-4">
         <div className="mb-8">
           <div className="relative pb-80">
             <Image
               src={`https://imagedelivery.net/V_VgYLYXooAb_-AJyJfp_Q/${data?.product.image}/product`}
-              className="h-96 bg-slate-300 object-cover "
+              className=" bg-slate-300 object-cover "
               layout="fill"
             />
           </div>
-          <div className="  flex cursor-pointer py-3 border-t border-b items-center space-x-3">
+          <div className="flex cursor-pointer py-3 border-t border-b items-center space-x-3">
             <Image
-              width={48}
-              height={48}
               src={`https://imagedelivery.net/V_VgYLYXooAb_-AJyJfp_Q/${data?.product?.User?.avatar}/avatar`}
               className="w-12 h-12 rounded-full bg-slate-300"
+              width={48}
+              height={48}
             />
             <div>
               <p className="text-sm font-medium text-gray-700">
@@ -86,7 +86,6 @@ const ItemDetail: NextPage = () => {
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
-                    {" "}
                     <path
                       fillRule="evenodd"
                       d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"

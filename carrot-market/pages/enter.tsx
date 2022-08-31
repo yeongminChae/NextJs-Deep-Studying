@@ -69,7 +69,7 @@ const Enter: NextPage = () => {
               type="number"
               required
             />
-            <Button text={toeknLoading ? "LOADING" : "Confirm Toekn"} />
+            <Button text={toeknLoading ? "Loading..." : "Confirm Token"} />
           </form>
         ) : (
           <>
@@ -133,10 +133,12 @@ const Enter: NextPage = () => {
                 ) : null}
               </label>
               {method === "email" ? (
-                <Button text={loading ? "LOADING" : "Get login link"} />
+                <Button text={loading ? "Loading..." : "Get login link"} />
               ) : null}
               {method === "phone" ? (
-                <Button text={loading ? "LOADING" : "Get one-time password"} />
+                <Button
+                  text={loading ? "Loading..." : "Get one-time password"}
+                />
               ) : null}
             </form>
           </>

@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import useMutation from "@libs/cleint/useMutation";
 import Router, { useRouter } from "next/router";
 import useSWR from "swr";
+import Image from "next/image";
 
 interface EditPriofile {
   email?: string;
@@ -96,7 +97,12 @@ const EditPriofile: NextPage = () => {
       <form onSubmit={handleSubmit(onValid)} className="py-10 px-4 space-y-4">
         <div className="flex items-center space-x-3">
           {avatarPreview ? (
-            <img src={avatarPreview} className="w-14 h-14 rounded-full" />
+            <Image
+              src={avatarPreview}
+              className="rounded-full bg-slate-300 object-cover"
+              width={48}
+              height={48}
+            />
           ) : (
             <div className="w-14 h-14 rounded-full bg-slate-500" />
           )}

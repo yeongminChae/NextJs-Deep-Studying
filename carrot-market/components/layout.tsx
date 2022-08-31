@@ -22,11 +22,7 @@ export default function Layout({
   };
   return (
     <div>
-      <div
-        className={
-          "bg-white w-full max-w-lg justify-center h-12 text-lg px-10 font-medium py-3 fixed text-gray-800 border-b top-0 flex items-center"
-        }
-      >
+      <div className="bg-white w-full h-12 max-w-lg justify-center text-lg px-10 font-medium fixed text-gray-800 border-b top-0 flex items-center">
         {canGoBack ? (
           <button onClick={onClick} className="absolute left-4">
             <svg
@@ -128,7 +124,7 @@ export default function Layout({
               <span>Messanger</span>
             </a>
           </Link>
-          <Link href="/streams">
+          <Link href="/streams?page=1">
             <a
               className={cls(
                 "flex flex-col items-center space-y-2",

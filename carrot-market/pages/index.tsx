@@ -7,7 +7,6 @@ import Head from "next/head";
 import useSWR from "swr";
 import { Product, User } from "@prisma/client";
 import Image from "next/image";
-import riceCake from "../public/local.jpeg";
 export interface ProductWithCount extends Product {
   _count: {
     favs: number;
@@ -35,6 +34,7 @@ const Home: NextPage = () => {
             title={product.name}
             price={product.price}
             hearts={product._count.favs}
+            image={product.image}
           />
         ))}
         <FloatingBtn href="/products/upload">
@@ -54,7 +54,7 @@ const Home: NextPage = () => {
             />
           </svg>
         </FloatingBtn>
-        {/* <Image src={riceCake} placeholder="blur" quality={5} /> */}
+        {/*  placeholder="blur" quality={5} /> */}
       </div>
     </Layout>
   );

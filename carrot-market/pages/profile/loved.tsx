@@ -6,7 +6,7 @@ import ProductList from "@components/product-list";
 const Loved: NextPage = () => {
   return (
     <Layout title="관심내역" canGoBack>
-      <div className="flex flex-col space-y-5 py-10">
+      <div className="flex flex-col space-y-5 divide-y">
         <ProductList kind="favs" />
       </div>
     </Layout>

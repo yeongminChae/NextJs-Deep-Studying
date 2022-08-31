@@ -9,6 +9,7 @@ import useMutation from "@libs/cleint/useMutation";
 import { cls } from "@libs/cleint/utils";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
+import Image from "next/image";
 
 interface AnswerWithUser extends Answer {
   user: User;
@@ -18,7 +19,7 @@ interface PostWithUser extends Post {
   user: User;
   _count: {
     answers: number;
-    wonderings: number;
+    wondering: number;
   };
   answers: AnswerWithUser[];
 }
@@ -58,9 +59,9 @@ const CommunityPostDetail: NextPage = () => {
           ...data.post,
           _count: {
             ...data.post._count,
-            wonderings: data.isWondering
-              ? data.post._count.wonderings - 1
-              : data.post._count.wonderings + 1,
+            wondering: data.isWondering
+              ? data.post._count.wondering - 1
+              : data.post._count.wondering + 1,
           },
         },
         isWondering: !data.isWondering,
@@ -88,7 +89,12 @@ const CommunityPostDetail: NextPage = () => {
           동네질문
         </span>
         <div className="flex mb-3 px-4 cursor-pointer pb-3  border-b items-center space-x-3">
-          <div className="w-10 h-10 rounded-full bg-slate-300" />
+          <Image
+            src={`https://imagedelivery.net/V_VgYLYXooAb_-AJyJfp_Q/${data?.post?.user?.avatar}/avatar`}
+            className="w-12 h-12 rounded-full bg-slate-300"
+            width={48}
+            height={48}
+          />
           <div>
             <p className="text-sm font-medium text-gray-700">
               {data?.post?.user?.name}
@@ -127,7 +133,7 @@ const CommunityPostDetail: NextPage = () => {
                   d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                 ></path>
               </svg>
-              <span>궁금해요 {data?.post?._count.wonderings}</span>
+              <span>궁금해요 {data?.post?._count.wondering}</span>
             </button>
             <span className="flex space-x-2 items-center text-sm">
               <svg
