@@ -10,7 +10,7 @@ import Button from "@components/button";
 interface PostWithUser extends Post {
   user: User;
   _count: {
-    wonderings: number;
+    wondering: number;
     answers: number;
   };
 }
@@ -27,7 +27,6 @@ const Community: NextPage = () => {
       ? `/api/posts?latitude=${latitude}&longitude=${longitude}`
       : null
   );
-  // console.log(data);
   return (
     <Layout hasTabBar title="동네생활">
       <div className="space-y-4 divide-y-[2px]">
@@ -61,7 +60,7 @@ const Community: NextPage = () => {
                       d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                     ></path>
                   </svg>
-                  <span>궁금해요 {post._count.wonderings} </span>
+                  <span>궁금해요 {post._count.wondering} </span>
                 </span>
                 <span className="flex space-x-2 items-center text-sm">
                   <svg

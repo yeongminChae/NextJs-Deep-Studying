@@ -5,10 +5,10 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import { Answer, Post, User } from "@prisma/client";
 import Link from "next/link";
-import useMutation from "@libs/cleint/useMutation";
-import { cls } from "@libs/cleint/utils";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
+import useMutation from "@libs/cleint/useMutation";
+import { cls } from "@libs/cleint/utils";
 import Image from "next/image";
 
 interface AnswerWithUser extends Answer {
@@ -34,7 +34,7 @@ interface AnswerForm {
   answer: string;
 }
 
-interface AnswerResponce {
+interface AnswerResponse {
   ok: boolean;
   response: Answer;
 }
@@ -42,14 +42,14 @@ interface AnswerResponce {
 const CommunityPostDetail: NextPage = () => {
   const router = useRouter();
   const { register, handleSubmit, reset } = useForm<AnswerForm>();
-  const { data, error, mutate } = useSWR<CommunityPostResponse>(
+  const { data, mutate } = useSWR<CommunityPostResponse>(
     router.query.id ? `/api/posts/${router.query.id}` : null
   );
   const [wonder, { loading }] = useMutation(
     `/api/posts/${router.query.id}/wonder`
   );
   const [sendAnswer, { data: answerData, loading: answerLoading }] =
-    useMutation<AnswerResponce>(`/api/posts/${router.query.id}/answers `);
+    useMutation<AnswerResponse>(`/api/posts/${router.query.id}/answers`);
   const onWonderClick = () => {
     if (!data) return;
     mutate(
@@ -60,8 +60,8 @@ const CommunityPostDetail: NextPage = () => {
           _count: {
             ...data.post._count,
             wondering: data.isWondering
-              ? data.post._count.wondering - 1
-              : data.post._count.wondering + 1,
+              ? data?.post._count.wondering - 1
+              : data?.post._count.wondering + 1,
           },
         },
         isWondering: !data.isWondering,
@@ -99,7 +99,7 @@ const CommunityPostDetail: NextPage = () => {
             <p className="text-sm font-medium text-gray-700">
               {data?.post?.user?.name}
             </p>
-            <Link href={`/users/profiles/${data?.post?.user?.id}`}>
+            <Link href={`/users/profiles/${data?.post?.user?.name}`}>
               <a className="text-xs font-medium text-gray-500">
                 View profile &rarr;
               </a>
@@ -133,7 +133,7 @@ const CommunityPostDetail: NextPage = () => {
                   d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                 ></path>
               </svg>
-              <span>궁금해요 {data?.post?._count.wondering}</span>
+              <span>궁금해요 {data?.post?._count?.wondering}</span>
             </button>
             <span className="flex space-x-2 items-center text-sm">
               <svg
@@ -150,19 +150,24 @@ const CommunityPostDetail: NextPage = () => {
                   d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                 ></path>
               </svg>
-              <span>답변 {data?.post._count.answers}</span>
+              <span>답변 {data?.post?._count?.answers}</span>
             </span>
           </div>
         </div>
         <div className="px-4 my-5 space-y-5">
-          {data?.post.answers.map((answer) => (
+          {data?.post?.answers?.map((answer) => (
             <div key={answer.id} className="flex items-start space-x-3">
-              <div className="w-8 h-8 bg-slate-200 rounded-full" />
+              <Image
+                src={`https://imagedelivery.net/V_VgYLYXooAb_-AJyJfp_Q/${answer.user.avatar}/avatar`}
+                className="w-12 h-12 rounded-full bg-slate-300"
+                width={36}
+                height={36}
+              />
               <div>
                 <span className="text-sm block font-medium text-gray-700">
                   {answer.user.name}
                 </span>
-                <span className="text-xs text-gray-500 block ">
+                <span className="text-xs text-gray-500 block">
                   {String(answer.createdAt)}
                 </span>
                 <p className="text-gray-700 mt-2">{answer.answer} </p>

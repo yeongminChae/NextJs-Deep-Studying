@@ -25,12 +25,16 @@ const ItemDetail: NextPage = () => {
   const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(
     router.query.id ? `/api/products/${router.query.id}` : null
   );
+  const { data: userData } = useSWR<ItemDetailResponse>(
+    "/api/users/otherusers"
+  );
   const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`);
   const onFavClick = () => {
     if (!data) return;
     boundMutate({ ...data, isLiked: !data.isLiked }, false);
     toggleFav({});
   };
+
   return (
     <Layout canGoBack>
       <div className="px-4 py-4">
@@ -53,7 +57,7 @@ const ItemDetail: NextPage = () => {
               <p className="text-sm font-medium text-gray-700">
                 {data?.product?.User?.name}
               </p>
-              <Link href={`/users/profiles/${data?.product?.User?.id}`}>
+              <Link href={`/users/profiles/${data?.product?.User?.name}`}>
                 <a className="text-xs font-medium text-gray-500 cursor-pointer">
                   View profile &rarr;
                 </a>

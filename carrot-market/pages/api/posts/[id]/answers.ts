@@ -12,14 +12,6 @@ async function handler(
     session: { user },
     body: { answer },
   } = req;
-  const post = await client.post.findUnique({
-    where: {
-      id: +id.toString(),
-    },
-    select: {
-      id: true,
-    },
-  });
 
   const newAnswer = await client.answer.create({
     data: {
