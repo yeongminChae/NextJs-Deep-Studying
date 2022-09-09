@@ -37,6 +37,7 @@ const Profile: NextPage = () => {
               width={48}
               height={48}
               className="w-16 h-16 rounded-full"
+              alt=""
             />
           ) : (
             <div className="w-16 h-16 bg-slate-500 rounded-full" />
