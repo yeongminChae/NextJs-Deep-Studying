@@ -36,7 +36,7 @@ const ItemDetail: NextPage = () => {
   };
 
   return (
-    <Layout canGoBack>
+    <Layout seoTitle="Product" canGoBack>
       <div className="px-4 py-4">
         <div className="mb-8">
           <div className="relative pb-80">
@@ -44,6 +44,7 @@ const ItemDetail: NextPage = () => {
               src={`https://imagedelivery.net/V_VgYLYXooAb_-AJyJfp_Q/${data?.product.image}/product`}
               className=" bg-slate-300 object-cover "
               layout="fill"
+              alt=""
             />
           </div>
           <div className="flex cursor-pointer py-3 border-t border-b items-center space-x-3">
@@ -52,6 +53,7 @@ const ItemDetail: NextPage = () => {
               className="w-12 h-12 rounded-full bg-slate-300"
               width={48}
               height={48}
+              alt=""
             />
             <div>
               <p className="text-sm font-medium text-gray-700">

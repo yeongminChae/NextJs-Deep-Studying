@@ -28,7 +28,11 @@ const Profile: NextPage = () => {
   );
   const router = useRouter();
   return (
-    <Layout hasTabBar title={`${userData?.profile.name}'s Profile`}>
+    <Layout
+      seoTitle="User's Profile"
+      hasTabBar
+      title={`${userData?.profile.name}'s Profile`}
+    >
       <div className="py-10 px-4">
         <div className="flex items-center space-x-3 ">
           {userData?.profile?.avatar ? (

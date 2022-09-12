@@ -1,5 +1,3 @@
-// this file is running once in the surver to get sort of the shell of the html
-// which is going to render of my html applicaion
 import Document, { Head, Html, Main, NextScript } from "next/document";
 
 class CustomDocument extends Document {

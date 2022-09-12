@@ -83,7 +83,7 @@ const CommunityPostDetail: NextPage = () => {
     }
   }, [answerData, reset, mutate]);
   return (
-    <Layout canGoBack>
+    <Layout seoTitle="Community Questions" canGoBack>
       <div>
         <span className="inline-flex my-3 ml-4 items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
           동네질문
@@ -94,6 +94,7 @@ const CommunityPostDetail: NextPage = () => {
             className="w-12 h-12 rounded-full bg-slate-300"
             width={48}
             height={48}
+            alt=""
           />
           <div>
             <p className="text-sm font-medium text-gray-700">
@@ -162,6 +163,7 @@ const CommunityPostDetail: NextPage = () => {
                 className="w-12 h-12 rounded-full bg-slate-300"
                 width={36}
                 height={36}
+                alt=""
               />
               <div>
                 <span className="text-sm block font-medium text-gray-700">

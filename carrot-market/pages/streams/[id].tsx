@@ -72,7 +72,7 @@ const Stream: NextPage = () => {
     sendMessage(form);
   };
   return (
-    <Layout canGoBack>
+    <Layout seoTitle="Stream Detail" canGoBack>
       <div className="py-10 px-4  space-y-4">
         <div className="w-full rounded-md shadow-sm bg-slate-300 aspect-video" />
         <div className="mt-5">

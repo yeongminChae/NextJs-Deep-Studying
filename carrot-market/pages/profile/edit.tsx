@@ -93,7 +93,7 @@ const EditPriofile: NextPage = () => {
     }
   }, [avatar]);
   return (
-    <Layout canGoBack>
+    <Layout seoTitle="Edit Profile" canGoBack>
       <form onSubmit={handleSubmit(onValid)} className="py-10 px-4 space-y-4">
         <div className="flex items-center space-x-3">
           {avatarPreview ? (
@@ -102,6 +102,7 @@ const EditPriofile: NextPage = () => {
               className="rounded-full bg-slate-300 object-cover"
               width={48}
               height={48}
+              alt=""
             />
           ) : (
             <div className="w-14 h-14 rounded-full bg-slate-500" />

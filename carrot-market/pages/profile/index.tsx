@@ -20,7 +20,7 @@ const Profile: NextPage = () => {
   const { user } = useUser();
   const { data } = useSWR<ReviewsResponse>("/api/reviews");
   return (
-    <Layout hasTabBar title="My Profile">
+    <Layout seoTitle="My Profile" hasTabBar title="My Profile">
       <div className="py-10 px-4">
         <div className="flex items-center space-x-3 ">
           {user?.avatar ? (
@@ -29,6 +29,7 @@ const Profile: NextPage = () => {
               width={48}
               height={48}
               className="w-16 h-16 rounded-full"
+              alt=""
             />
           ) : (
             <div className="w-16 h-16 bg-slate-500 rounded-full" />
