@@ -4,7 +4,7 @@ import Layout from "@components/layout";
 import Item from "@components/item";
 import useUser from "@libs/cleint/useUser";
 import Head from "next/head";
-import useSWR from "swr";
+import useSWR, { SWRConfig } from "swr";
 import { Product, User } from "@prisma/client";
 import Image from "next/image";
 export interface ProductWithCount extends Product {
@@ -18,26 +18,27 @@ interface ProductResponse {
   products: ProductWithCount[];
 }
 
-const Home: NextPage<{ products: ProductWithCount[] }> = ({ products }) => {
+const Home: NextPage = () => {
   const { user, isLoading } = useUser();
-  // const { data } = useSWR<ProductResponse>("/api/products");
+  const { data } = useSWR<ProductResponse>("/api/products");
   return (
     <Layout title="Home" hasTabBar>
       <Head>
         <title>Home</title>
       </Head>
       <div className="flex flex-col space-y-5 divide-y">
-        {/* {data ? data?.products?.map((product) => ( */}
-        {products?.map((product) => (
-          <Item
-            key={product.id}
-            id={product.id}
-            title={product.name}
-            price={product.price}
-            hearts={product._count?.favs}
-            image={product.image}
-          />
-        ))}
+        {data
+          ? data?.products?.map((product) => (
+              <Item
+                key={product.id}
+                id={product.id}
+                title={product.name}
+                price={product.price}
+                hearts={product._count?.favs || 0}
+                image={product.image}
+              />
+            ))
+          : "Loading..."}
         <FloatingBtn href="/products/upload">
           <svg
             className="h-6 w-6"
@@ -61,6 +62,23 @@ const Home: NextPage<{ products: ProductWithCount[] }> = ({ products }) => {
   );
 };
 
+const Page: NextPage<{ products: ProductWithCount[] }> = ({ products }) => {
+  return (
+    <SWRConfig
+      value={{
+        fallback: {
+          "/api/products": {
+            ok: true,
+            products,
+          },
+        },
+      }}
+    >
+      <Home />
+    </SWRConfig>
+  );
+};
+
 export async function getServerSideProps() {
   const products = await client.product.findMany({});
   return {
@@ -70,4 +88,4 @@ export async function getServerSideProps() {
   };
 }
 
-export default Home;
+export default Page;
