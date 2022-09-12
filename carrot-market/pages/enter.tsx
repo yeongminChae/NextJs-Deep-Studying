@@ -6,7 +6,12 @@ import Button from "@components/button";
 import Input from "@components/input";
 import useMutation from "@libs/cleint/useMutation";
 import Router, { useRouter } from "next/router";
-
+import dynamic from "next/dynamic";
+// import Bs from "@components/bs";
+// -> this bs file will be returned in no matter what page u visit.
+// even u need to download that components only in a specific page
+const Bs = dynamic(() => import("@components/bs"));
+// it will allow u to use this when u need this file.
 interface EnterForm {
   email?: string;
   phone?: string;
@@ -122,14 +127,17 @@ const Enter: NextPage = () => {
                   />
                 ) : null}
                 {method === "phone" ? (
-                  <Input
-                    register={register("phone")}
-                    name="phone"
-                    label="Phone number"
-                    type="number"
-                    kind="phone"
-                    required
-                  />
+                  <>
+                    <Bs />
+                    <Input
+                      register={register("phone")}
+                      name="phone"
+                      label="Phone number"
+                      type="number"
+                      kind="phone"
+                      required
+                    />
+                  </>
                 ) : null}
               </label>
               {method === "email" ? (
