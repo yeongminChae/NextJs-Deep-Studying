@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { NextPage } from "next";
 import { useForm } from "react-hook-form";
 import { cls } from "@libs/cleint/utils";
@@ -8,10 +8,15 @@ import useMutation from "@libs/cleint/useMutation";
 import Router, { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 // import Bs from "@components/bs";
-// -> this bs file will be returned in no matter what page u visit.
-// even u need to download that components only in a specific page
-const Bs = dynamic(() => import("@components/bs"));
-// it will allow u to use this when u need this file.
+
+const Bs = dynamic(
+  () =>
+    new Promise((resolve) =>
+      setTimeout(() => resolve(import("@components/bs")), 10000)
+    ),
+  // { ssr: false, loading: () => <span>Loading a big component now</span> } // nextjs way
+  { ssr: false, suspense: true } // react way
+);
 interface EnterForm {
   email?: string;
   phone?: string;
@@ -128,7 +133,9 @@ const Enter: NextPage = () => {
                 ) : null}
                 {method === "phone" ? (
                   <>
-                    <Bs />
+                    <Suspense fallback="Loading smth big">
+                      <Bs />
+                    </Suspense>
                     <Input
                       register={register("phone")}
                       name="phone"
