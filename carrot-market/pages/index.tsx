@@ -6,6 +6,7 @@ import useUser from "@libs/cleint/useUser";
 import Head from "next/head";
 import useSWR, { SWRConfig } from "swr";
 import { Product, User } from "@prisma/client";
+import client from "@libs/server/client";
 import Image from "next/image";
 export interface ProductWithCount extends Product {
   _count: {
