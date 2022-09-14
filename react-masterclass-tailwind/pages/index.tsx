@@ -2,9 +2,8 @@ import type { NextPage } from "next";
 
 const Home: NextPage = () => {
   return (
-    <div className="grid gap-10 bg-slate-200 p-20 text-center ">
-      <h1 className="text-black">it works</h1>
-      <span className="flex flex-col gap-10 bg-red-300">does it?</span>
+    <div className="flex h-screen w-screen items-center justify-center bg-gradient-to-tl from-purple-500 to-pink-500">
+      <div className="h-48 w-48 rounded-lg bg-white shadow-md" />
     </div>
   );
 };
