@@ -13,7 +13,7 @@ interface Post {
 
 const Blog: NextPage<{ posts: Post[] }> = ({ posts }) => {
   return (
-    <Layout title="Blog" seoTitle="Blog">
+    <Layout title="Blog" seoTitle="Blog" canGoBack>
       <h1 className="font-semibold text-lg mb-10 mt-5 text-center">
         Latest Posts :{" "}
       </h1>

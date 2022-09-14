@@ -8,7 +8,7 @@ import Layout from "@components/layout";
 
 const Post: NextPage<{ post: string; data: any }> = ({ post, data }) => {
   return (
-    <Layout title={data.title} seoTitle={data.title}>
+    <Layout title={data.title} canGoBack seoTitle={data.title}>
       <div
         className="blog-post-content"
         dangerouslySetInnerHTML={{ __html: post }}
