@@ -10,8 +10,8 @@ const Home: NextPage = () => {
     [-800, 0, 800],
     [
       "linear-gradient(135deg,rgb(0, 238, 214),rgb(18, 70, 240))",
-      "linear-gradient(135deg,rgb(238,0,153),rgb(221,0,238))",
-      "linear-gradient(135deg,rgb(34, 237, 44),rgb(173, 170, 27))",
+      "linear-gradient(135deg,rgb(160, 132, 202),rgb(235, 199, 232))",
+      "linear-gradient(135deg,rgb(247, 246, 220),rgb(255, 192, 144))",
     ]
   );
   const { scrollY, scrollYProgress } = useScroll();
@@ -30,7 +30,7 @@ const Home: NextPage = () => {
         drag="x"
         dragSnapToOrigin
         style={{ x, rotateZ, scale }}
-        className="grid h-32 w-32 grid-cols-2 rounded-2xl bg-white shadow-md "
+        className="bg-white[/0.2] grid h-32 w-32 grid-cols-2 rounded-2xl border-2 border-double border-white shadow-md  "
       />
     </motion.div>
   );
