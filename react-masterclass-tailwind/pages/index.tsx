@@ -2,40 +2,55 @@ import type { NextPage } from "next";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 
-const boxVars = {
-  initial: {
+const box = {
+  invisible: {
+    x: 500,
     opacity: 0,
     scale: 0,
   },
   visible: {
+    x: 0,
     opacity: 1,
     scale: 1,
-    rotateZ: 360,
+    transition: {
+      duration: 1,
+    },
   },
-  leaving: {
+  exit: {
+    x: -500,
     opacity: 0,
     scale: 0,
-    y: 50,
+    rotateX: 180,
+    transition: {
+      duration: 1,
+    },
   },
 };
 
 const Home: NextPage = () => {
-  const [showing, setShowing] = useState(false);
-  const toggleShowng = () => setShowing((prev) => !prev);
+  const [visible, setVisible] = useState(1);
+  const nextPls = () => setVisible((prev) => (prev === 10 ? 10 : prev + 1));
   return (
-    <motion.div className="flex h-screen w-screen items-center justify-center bg-gradient-to-tl from-purple-600 to-pink-600">
-      <button onClick={toggleShowng}>Click</button>
+    <motion.div className="flex h-screen w-screen flex-col items-center justify-center bg-gradient-to-tl from-purple-600 to-pink-600">
       <AnimatePresence>
-        {showing ? (
-          <motion.div
-            variants={boxVars}
-            initial="initial"
-            animate="visible"
-            exit="leaving"
-            className="absolute top-[100px] h-48 w-[400px] rounded-3xl bg-white shadow-lg "
-          />
-        ) : null}
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) =>
+          i === visible ? (
+            <motion.div
+              key={i}
+              variants={box}
+              initial="invisible"
+              animate="visible"
+              exit="exit"
+              className="absolute flex h-40 w-40 items-center justify-center rounded-[40px] bg-white text-2xl shadow-xl"
+            >
+              {i}
+            </motion.div>
+          ) : null
+        )}
       </AnimatePresence>
+      <button className="absolute bottom-52" onClick={nextPls}>
+        Next
+      </button>
     </motion.div>
   );
 };
