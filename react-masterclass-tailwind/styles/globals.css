@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .box-child {
+    div:first-child {
+      grid-column: span2;
+    }
+    div:last-child {
+      grid-column: span2;
+    }
+  }
+}

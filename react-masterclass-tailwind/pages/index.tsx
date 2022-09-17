@@ -5,29 +5,36 @@ import { cls } from "../libs/client/utils";
 
 const Home: NextPage = () => {
   const [clicked, setClicked] = useState(false);
-  const toggleClick = () => setClicked((prev) => !prev);
+  const toggle = () => setClicked((prev) => !prev);
   return (
     <motion.div
-      onClick={toggleClick}
-      className="flex h-screen w-screen items-center justify-around bg-gradient-to-tl from-purple-600 to-pink-600"
+      onClick={toggle}
+      className="flex h-screen w-screen items-center justify-around bg-gradient-to-r from-[#c407d1] to-[#e09]"
     >
-      <motion.div className="flex h-64 w-64 items-center justify-center rounded-[40px] bg-white text-2xl shadow-xl">
-        {!clicked ? (
-          <motion.div
-            layoutId="circle"
-            className="h-[80px] w-[80px] rounded-full bg-[rgb(0,165,255)] shadow-xl"
-          />
-        ) : null}
+      <motion.div className="box-child grid w-[50vw] grid-cols-3 gap-3.5">
+        <motion.div
+          layoutId="Hello"
+          className="col-span-2 h-40 rounded-[40px] bg-white text-2xl shadow-xl"
+        />
+        <motion.div className="h-40 rounded-[40px] bg-white text-2xl shadow-xl" />
+        <motion.div className="h-40 rounded-[40px] bg-white text-2xl shadow-xl" />
+        <motion.div className="col-span-2 h-40 rounded-[40px] bg-white text-2xl shadow-xl" />
       </motion.div>
-      <motion.div className="flex h-64 w-64 items-center justify-center rounded-[40px] bg-white text-2xl shadow-xl">
+      <AnimatePresence>
         {clicked ? (
           <motion.div
-            layoutId="circle"
-            className="h-[80px] w-[80px] rounded-md bg-[rgb(0,165,255)] shadow-xl"
-            style={{ scale: 2 }}
-          />
+            initial={{ backgroundColor: "rgba(0,0,0,0)" }}
+            animate={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+            exit={{ backgroundColor: "rgba(0,0,0,0)" }}
+            className="absolute flex h-[100%] w-[100%] items-center justify-center "
+          >
+            <motion.div
+              layoutId="Hello"
+              className="h-[200px] w-[350px] rounded-[40px] bg-white text-2xl shadow-xl"
+            />
+          </motion.div>
         ) : null}
-      </motion.div>
+      </AnimatePresence>
     </motion.div>
   );
 };
