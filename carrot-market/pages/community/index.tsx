@@ -6,7 +6,7 @@ import useSWR from "swr";
 import { Post, User } from "@prisma/client";
 import useCoords from "@libs/cleint/useCoords";
 import Button from "@components/button";
-
+import client from "@libs/server/client";
 interface PostWithUser extends Post {
   user: User;
   _count: {
@@ -109,6 +109,7 @@ const Community: NextPage<PostsResponse> = ({ posts }) => {
 };
 
 export async function getStaticProps() {
+  console.log("Building comm , starically");
   const posts = await client.post.findMany({ include: { user: true } });
   return {
     props: {
@@ -117,5 +118,5 @@ export async function getStaticProps() {
     revalidate: 20,
   };
 }
-
+// for testing this ISR function we have to build again first and command npm run start .
 export default Community;
