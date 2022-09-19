@@ -109,14 +109,15 @@ const Community: NextPage<PostsResponse> = ({ posts }) => {
 };
 
 export async function getStaticProps() {
+  console.log("");
   console.log("Building comm , starically");
   const posts = await client.post.findMany({ include: { user: true } });
   return {
     props: {
       posts: JSON.parse(JSON.stringify(posts)),
     },
-    revalidate: 20,
+    // revalidate: 20,
   };
 }
-// for testing this ISR function we have to build again first and command npm run start .
+
 export default Community;
