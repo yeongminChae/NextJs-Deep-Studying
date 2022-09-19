@@ -1,46 +1,68 @@
 import type { NextPage } from "next";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { cls } from "../libs/client/utils";
 import styled from "styled-components";
 
-const Grid = styled.div`
-  div:first-child,
-  div:last-child {
-    grid-column: span 2;
-  }
-`;
+const box = {
+  entry: (isBack: boolean) => ({
+    x: isBack ? -500 : 500,
+    opacity: 0,
+    scale: 0,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.3,
+    },
+  },
+  exit: (isBack: boolean) => ({
+    x: isBack ? 500 : -500,
+    opacity: 0,
+    scale: 0,
+    rotateX: 180,
+    transition: {
+      duration: 0.3,
+    },
+  }),
+};
 
 const Home: NextPage = () => {
-  const [clickedId, setClickedId] = useState<null | string>(null);
+  const [visible, setVisible] = useState(1);
+  const [back, setBack] = useState<boolean>(false);
+  const nextPls = () => {
+    setBack(false);
+    setVisible((prev) => (prev === 10 ? 10 : prev + 1));
+  };
+  const prevPls = () => {
+    setBack(true);
+    setVisible((prev) => (prev === 1 ? 1 : prev - 1));
+  };
+  const customValue = {
+    direction: back,
+  };
   return (
-    <motion.div className="flex h-screen w-screen items-center justify-around bg-gradient-to-r from-[#c407d1] to-[#e09]">
-      <Grid className="grid w-[50vw] grid-cols-3 gap-3.5 ">
-        {["1", "2", "3", "4"].map((n) => (
-          <motion.div
-            onClick={() => setClickedId(n)}
-            key={n}
-            layoutId={n} // cf) int + "" -> string
-            className="h-40 rounded-[40px] bg-white text-2xl shadow-xl"
-          />
-        ))}
-      </Grid>
-      <AnimatePresence>
-        {clickedId ? (
-          <motion.div
-            onClick={() => setClickedId(null)}
-            initial={{ backgroundColor: "rgba(0,0,0,0)" }}
-            animate={{ backgroundColor: "rgba(0,0,0,0.5)" }}
-            exit={{ backgroundColor: "rgba(0,0,0,0)" }}
-            className="absolute flex h-[100%] w-[100%] items-center justify-center "
-          >
-            <motion.div
-              layoutId={clickedId}
-              className="h-[200px] w-[350px] rounded-[40px] bg-white text-2xl shadow-xl"
-            />
-          </motion.div>
-        ) : null}
+    <motion.div className="flex h-screen w-screen flex-col items-center justify-center bg-gradient-to-tl from-purple-600 to-pink-600">
+      <AnimatePresence mode="wait" custom={customValue.direction}>
+        <motion.div
+          key={visible}
+          custom={customValue.direction}
+          variants={box}
+          initial="entry"
+          animate="center"
+          exit="exit"
+          className="absolute flex h-40 w-64 items-center justify-center rounded-[40px] bg-white text-2xl shadow-xl"
+        >
+          {visible}
+        </motion.div>
       </AnimatePresence>
+      <button className="absolute bottom-52" onClick={nextPls}>
+        Next
+      </button>
+      <button className="absolute bottom-44" onClick={prevPls}>
+        Prev
+      </button>
     </motion.div>
   );
 };
