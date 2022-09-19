@@ -39,7 +39,13 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
     boundMutate({ ...data, isLiked: !data.isLiked }, false);
     toggleFav({});
   };
-
+  if (router.isFallback) {
+    return (
+      <Layout title="loading for uuuuu">
+        <span>i love u</span>
+      </Layout>
+    );
+  }
   return (
     <Layout seoTitle="Product" canGoBack>
       <div className="px-4 py-4">
@@ -152,7 +158,7 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
 export const getStaticPaths: GetStaticPaths = () => {
   return {
     paths: [],
-    fallback: "blocking",
+    fallback: true,
   };
 };
 
