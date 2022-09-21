@@ -30,10 +30,12 @@ async function handler(
   });
   console.log(newAnswer);
   // await res.revalidate("/community/[id]");
-  await res.revalidate("/community");
-  res.json({
+  // await res.revalidate("/community");
+
+  return res.json({
     ok: true,
     answer: newAnswer,
+    revalidated: true,
   });
 }
 

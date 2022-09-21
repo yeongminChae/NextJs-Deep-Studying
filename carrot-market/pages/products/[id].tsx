@@ -2,7 +2,7 @@ import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Button from "@components/button";
 import Layout from "@components/layout";
 import { useRouter } from "next/router";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR, { SWRConfig, useSWRConfig } from "swr";
 import Link from "next/link";
 import { Product, User } from "@prisma/client";
 import useMutation from "@libs/cleint/useMutation";
@@ -20,11 +20,7 @@ interface ItemDetailResponse {
   isLiked: Boolean;
 }
 
-const ItemDetail: NextPage<ItemDetailResponse> = ({
-  product,
-  relatedProducts,
-  isLiked,
-}) => {
+const ItemDetail: NextPage = () => {
   const router = useRouter();
   // const { mutate } = useSWRConfig();
   const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(
@@ -52,7 +48,7 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
         <div className="mb-8">
           <div className="relative pb-80">
             <Image
-              src={`https://imagedelivery.net/V_VgYLYXooAb_-AJyJfp_Q/${product.image}/product`}
+              src={`https://imagedelivery.net/V_VgYLYXooAb_-AJyJfp_Q/${data?.product.image}/product`}
               className=" bg-slate-300 object-cover "
               layout="fill"
               alt=""
@@ -60,7 +56,7 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
           </div>
           <div className="flex cursor-pointer items-center space-x-3 border-t border-b py-3">
             <Image
-              src={`https://imagedelivery.net/V_VgYLYXooAb_-AJyJfp_Q/${product?.User?.avatar}/avatar`}
+              src={`https://imagedelivery.net/V_VgYLYXooAb_-AJyJfp_Q/${data?.product?.User?.avatar}/avatar`}
               className="h-12 w-12 rounded-full bg-slate-300"
               width={48}
               height={48}
@@ -68,9 +64,9 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
             />
             <div>
               <p className="text-sm font-medium text-gray-700">
-                {product?.User?.name}
+                {data?.product?.User?.name}
               </p>
-              <Link href={`/users/profiles/${product?.User?.name}`}>
+              <Link href={`/users/profiles/${data?.product?.User?.name}`}>
                 <a className="cursor-pointer text-xs font-medium text-gray-500">
                   View profile &rarr;
                 </a>
@@ -79,24 +75,24 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
           </div>
           <div className="mt-5">
             <h1 className="text-3xl font-bold text-gray-900">
-              {product?.name}
+              {data?.product?.name}
             </h1>
             <span className="mt-3 block text-2xl text-gray-900">
-              ${product?.price}
+              ${data?.product?.price}
             </span>
-            <p className=" my-6 text-gray-700">{product?.description}</p>
+            <p className=" my-6 text-gray-700">{data?.product?.description}</p>
             <div className="flex items-center justify-between space-x-2">
               <Button large text="Talk to seller" />
               <button
                 onClick={onFavClick}
                 className={cls(
                   "flex items-center justify-center rounded-md p-3 hover:bg-gray-100 ",
-                  isLiked
+                  data?.isLiked
                     ? "text-red-400 hover:text-red-500"
                     : "text-gray-400 hover:text-gray-500"
                 )}
               >
-                {isLiked ? (
+                {data?.isLiked ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-6 w-6"
@@ -133,7 +129,7 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Similar items</h2>
           <div className=" mt-6 grid grid-cols-2 gap-4">
-            {relatedProducts?.map((product) => (
+            {data?.relatedProducts?.map((product) => (
               <div key={product.id}>
                 <Link href={`/products/${product.id}`}>
                   <div className="mb-4 h-56 w-full cursor-pointer bg-slate-300" />
@@ -152,6 +148,22 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
         </div>
       </div>
     </Layout>
+  );
+};
+
+const Page: NextPage<ItemDetailResponse> = ({
+  product,
+  relatedProducts,
+  isLiked,
+}) => {
+  return (
+    <SWRConfig
+      value={{
+        fallback: { "api/posts/[id]": { product, relatedProducts, isLiked } },
+      }}
+    >
+      <ItemDetail />
+    </SWRConfig>
   );
 };
 
@@ -197,7 +209,17 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
       },
     },
   });
-  const isLiked = false;
+  const isLiked = Boolean(
+    await client.fav.findFirst({
+      where: {
+        productId: product?.id,
+        userId: product.User?.id,
+      },
+      select: {
+        id: true,
+      },
+    })
+  );
   return {
     props: {
       product: JSON.parse(JSON.stringify(product)),

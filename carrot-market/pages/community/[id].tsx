@@ -1,8 +1,8 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Layout from "@components/layout";
 import TextArea from "@components/textarea";
-import { useRouter } from "next/router";
-import useSWR from "swr";
+import Router, { useRouter } from "next/router";
+import useSWR, { SWRConfig } from "swr";
 import { Answer, Post, User } from "@prisma/client";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -40,10 +40,7 @@ interface AnswerResponse {
   response: Answer;
 }
 
-const CommunityPostDetail: NextPage<CommunityPostResponse> = ({
-  post,
-  isWondering,
-}) => {
+const CommunityPostDetail: NextPage = () => {
   const router = useRouter();
   const { register, handleSubmit, reset } = useForm<AnswerForm>();
   const { data, mutate } = useSWR<CommunityPostResponse>(
@@ -64,8 +61,8 @@ const CommunityPostDetail: NextPage<CommunityPostResponse> = ({
           _count: {
             ...data.post._count,
             wondering: data.isWondering
-              ? post._count.wondering - 1
-              : post._count.wondering + 1,
+              ? data?.post._count.wondering - 1
+              : data?.post._count.wondering + 1,
           },
         },
         isWondering: !data.isWondering,
@@ -101,7 +98,7 @@ const CommunityPostDetail: NextPage<CommunityPostResponse> = ({
         </span>
         <div className="mb-3 flex cursor-pointer items-center space-x-3  border-b px-4 pb-3">
           <Image
-            src={`https://imagedelivery.net/V_VgYLYXooAb_-AJyJfp_Q/${post?.user?.avatar}/avatar`}
+            src={`https://imagedelivery.net/V_VgYLYXooAb_-AJyJfp_Q/${data?.post?.user?.avatar}/avatar`}
             className="h-12 w-12 rounded-full bg-slate-300"
             width={48}
             height={48}
@@ -109,9 +106,9 @@ const CommunityPostDetail: NextPage<CommunityPostResponse> = ({
           />
           <div>
             <p className="text-sm font-medium text-gray-700">
-              {post?.user?.name}
+              {data?.post?.user?.name}
             </p>
-            <Link href={`/users/profiles/${post?.user?.name}`}>
+            <Link href={`/users/profiles/${data?.post?.user?.name}`}>
               <a className="text-xs font-medium text-gray-500">
                 View profile &rarr;
               </a>
@@ -121,14 +118,14 @@ const CommunityPostDetail: NextPage<CommunityPostResponse> = ({
         <div>
           <div className="mt-2 px-4 text-gray-700">
             <span className="font-medium text-orange-500">Q.</span>{" "}
-            {post?.question}
+            {data?.post?.question}
           </div>
           <div className="mt-3 flex w-full space-x-5 border-t border-b-[2px] px-4 py-2.5  text-gray-700">
             <button
               onClick={onWonderClick}
               className={cls(
                 "flex items-center space-x-2 text-sm",
-                isWondering ? "text-teal-400" : ""
+                data?.isWondering ? "text-teal-400" : ""
               )}
             >
               <svg
@@ -145,7 +142,7 @@ const CommunityPostDetail: NextPage<CommunityPostResponse> = ({
                   d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                 ></path>
               </svg>
-              <span>궁금해요 {post?._count?.wondering}</span>
+              <span>궁금해요 {data?.post?._count?.wondering}</span>
             </button>
             <span className="flex items-center space-x-2 text-sm">
               <svg
@@ -162,12 +159,12 @@ const CommunityPostDetail: NextPage<CommunityPostResponse> = ({
                   d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                 ></path>
               </svg>
-              <span>답변 {post?._count?.answers}</span>
+              <span>답변 {data?.post?._count?.answers}</span>
             </span>
           </div>
         </div>
         <div className="my-5 space-y-5 px-4">
-          {post?.answers?.map((answer) => (
+          {data?.post?.answers?.map((answer) => (
             <div key={answer.id} className="flex items-start space-x-3">
               <Image
                 src={`https://imagedelivery.net/V_VgYLYXooAb_-AJyJfp_Q/${answer.user.avatar}/avatar`}
@@ -201,6 +198,18 @@ const CommunityPostDetail: NextPage<CommunityPostResponse> = ({
         </form>
       </div>
     </Layout>
+  );
+};
+
+const Page: NextPage<CommunityPostResponse> = ({ post, isWondering }) => {
+  return (
+    <SWRConfig
+      value={{
+        fallback: { "api/posts/[id]": { ok: true, post, isWondering } },
+      }}
+    >
+      <CommunityPostDetail />
+    </SWRConfig>
   );
 };
 
@@ -272,4 +281,4 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   };
 };
 
-export default CommunityPostDetail;
+export default Page;
