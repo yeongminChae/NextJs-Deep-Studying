@@ -1,8 +1,9 @@
 import type { NextPage } from "next";
-import { motion } from "framer-motion";
+import { motion, useAnimation, useScroll } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { cls } from "../../../libs/client/utils";
 
 const logoVars = {
   normal: {
@@ -19,11 +20,49 @@ const logoVars = {
 const Header: NextPage = () => {
   const router = useRouter();
   const [searchOpen, setSearchOpen] = useState(false);
-  const toggleSearch = () => setSearchOpen((prev) => !prev);
+  const inputAnimation = useAnimation();
+  const navAnimation = useAnimation();
+  const { scrollY } = useScroll();
+  const toggleSearch = () => {
+    if (searchOpen) {
+      inputAnimation.start({
+        scaleX: 0,
+      });
+    } else {
+      inputAnimation.start({
+        scaleX: 1,
+      });
+    }
+    setSearchOpen((prev) => !prev);
+  };
+  const navVars = {
+    top: {
+      backgroundColor: "rgba(0,0,0,0)",
+    },
+    scroll: {
+      backgroundColor: "rgba(0,0,0,1)",
+    },
+  };
+  useEffect(() => {
+    scrollY.onChange(() => {
+      if (scrollY.get() > 80) {
+        navAnimation.start("scroll");
+      } else {
+        navAnimation.start("top");
+      }
+    });
+  }, [navAnimation, scrollY]);
   return (
-    <div
+    <motion.div
       id="nav"
-      className="font-xs fixed top-0 flex h-20 w-full items-center justify-between bg-black px-5 py-8 shadow-xl"
+      variants={navVars}
+      animate={navAnimation}
+      // other way : animate={{backgroundColor:scrollY > 80 "rgba(0,0,0,0)" : "rgba(0,0,0,1)"}}
+      initial="top"
+      className={cls(
+        "font-xs fixed top-0 flex h-20 w-full items-center justify-between px-5 py-8 ",
+        scrollY.get() > 80 ? "shadow-2xl" : "shadow-none"
+      )}
     >
       <div id="col" className="flex items-center">
         <div id="logo" className="mr-12 ">
@@ -72,13 +111,10 @@ const Header: NextPage = () => {
         </ul>
       </div>
       <div id="col" className="flex items-start justify-between ">
-        <span
-          id="search"
-          className="relative flex items-center text-white "
-          onClick={toggleSearch}
-        >
+        <span id="search" className="relative flex items-center text-white ">
           <motion.svg
-            animate={{ x: searchOpen ? -215 : 0 }}
+            onClick={toggleSearch}
+            animate={{ x: searchOpen ? -180 : 0 }}
             transition={{ type: "linear" }}
             fill="currentColor"
             viewBox="0 0 20 20"
@@ -92,15 +128,15 @@ const Header: NextPage = () => {
             ></path>
           </motion.svg>
           <motion.input
-            animate={{ scaleX: searchOpen ? 1 : 0 }}
+            animate={inputAnimation}
             transition={{ type: "linear" }}
             id="Input"
-            placeholder=" Search for"
-            className="white absolute -left-48 right-0 -z-[1] ml-2 flex origin-right items-center border border-[#fff] bg-transparent px-1 py-2 pl-1 text-base "
+            placeholder=" Search for ?"
+            className="white absolute -left-48 right-0 -z-[1] ml-2 flex origin-right items-center border border-[#fff] bg-transparent px-1 py-2 pl-8 text-base text-white/70"
           />
         </span>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
