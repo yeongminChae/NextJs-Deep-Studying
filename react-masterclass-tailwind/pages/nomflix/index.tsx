@@ -11,3 +11,5 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+// cp -r pages/nomflix ../../portfolio/my-portfolio-app/pages/cloneCoding/
+// for copying

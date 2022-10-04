@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 const logoVars = {
   normal: {
@@ -17,7 +18,8 @@ const logoVars = {
 
 const Header: NextPage = () => {
   const router = useRouter();
-  console.log(router.pathname);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const toggleSearch = () => setSearchOpen((prev) => !prev);
   return (
     <div
       id="nav"
@@ -69,9 +71,15 @@ const Header: NextPage = () => {
           </li>
         </ul>
       </div>
-      <div id="col">
-        <span id="search" className="text-white">
-          <svg
+      <div id="col" className="flex items-start justify-between ">
+        <span
+          id="search"
+          className="relative flex items-center text-white "
+          onClick={toggleSearch}
+        >
+          <motion.svg
+            animate={{ x: searchOpen ? -215 : 0 }}
+            transition={{ type: "linear" }}
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
@@ -82,7 +90,14 @@ const Header: NextPage = () => {
               d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
               clipRule="evenodd"
             ></path>
-          </svg>
+          </motion.svg>
+          <motion.input
+            animate={{ scaleX: searchOpen ? 1 : 0 }}
+            transition={{ type: "linear" }}
+            id="Input"
+            placeholder=" Search for"
+            className="white absolute -left-48 right-0 -z-[1] ml-2 flex origin-right items-center border border-[#fff] bg-transparent px-1 py-2 pl-1 text-base "
+          />
         </span>
       </div>
     </div>
