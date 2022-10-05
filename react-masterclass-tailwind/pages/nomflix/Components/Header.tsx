@@ -10,10 +10,19 @@ const logoVars = {
     fillOpacity: 1,
   },
   active: {
-    fillOpacity: [0, 1, 0],
+    fillOpacity: [1, 0, 1],
     transition: {
       repeat: Infinity,
     },
+  },
+};
+
+const navVars = {
+  top: {
+    backgroundColor: "rgba(0,0,0,0)",
+  },
+  scroll: {
+    backgroundColor: "rgba(0,0,0,1)",
   },
 };
 
@@ -23,6 +32,7 @@ const Header: NextPage = () => {
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
   const { scrollY } = useScroll();
+
   const toggleSearch = () => {
     if (searchOpen) {
       inputAnimation.start({
@@ -35,14 +45,7 @@ const Header: NextPage = () => {
     }
     setSearchOpen((prev) => !prev);
   };
-  const navVars = {
-    top: {
-      backgroundColor: "rgba(0,0,0,0)",
-    },
-    scroll: {
-      backgroundColor: "rgba(0,0,0,1)",
-    },
-  };
+
   useEffect(() => {
     scrollY.onChange(() => {
       if (scrollY.get() > 80) {
@@ -69,6 +72,7 @@ const Header: NextPage = () => {
           <motion.svg
             variants={logoVars}
             initial="normal"
+            end="normal"
             whileHover="active"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 1024 276.742"
@@ -119,7 +123,7 @@ const Header: NextPage = () => {
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
-            className="h-6"
+            className="mr-3 h-6"
           >
             <path
               fillRule="evenodd"
@@ -129,10 +133,11 @@ const Header: NextPage = () => {
           </motion.svg>
           <motion.input
             animate={inputAnimation}
+            initial={{ scaleX: 0 }}
             transition={{ type: "linear" }}
             id="Input"
             placeholder=" Search for ?"
-            className="white absolute -left-48 right-0 -z-[1] ml-2 flex origin-right items-center border border-[#fff] bg-transparent px-1 py-2 pl-8 text-base text-white/70"
+            className="white absolute -left-48 right-0 -z-[1] ml-2 flex origin-right items-center border border-[#fff] bg-transparent px-1 py-2 pl-8 text-base text-white/70 focus:border-[rgb(240,73,76)] focus:outline-none focus:ring-2 focus:ring-[rgb(242,115,117)] "
           />
         </span>
       </div>
