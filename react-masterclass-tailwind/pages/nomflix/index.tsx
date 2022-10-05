@@ -58,11 +58,12 @@ const infoVars = {
   },
 };
 
-const nextVars = {
+const dirVars = {
   initial: {
     opacity: 1,
   },
 };
+
 const offset = 6;
 
 const Home: NextPage = () => {
@@ -89,7 +90,7 @@ const Home: NextPage = () => {
       setBack(true);
       const totalMovies = data?.results.length - 1;
       const maxIndex = Math.floor(totalMovies / offset) - 1;
-      setIndex((prev) => (prev === 0 ? 0 : prev - 1));
+      setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
     }
   };
   const customValue = {
@@ -122,37 +123,18 @@ const Home: NextPage = () => {
             </div>
           </Banner>
         )}{" "}
-        <Slider className="relative -mt-20 ">
+        <Slider className=" -mt-20 ">
           <AnimatePresence
             initial={false}
             onExitComplete={toggleLeaving}
             mode="sync"
             custom={customValue.direction}
           >
-            <div>
-              <motion.div
-                variants={nextVars}
-                initial="initial"
-                whileHover={{ scale: 1.4 }}
-                onClick={increaseIndex}
-                className="relative float-right flex h-40 w-[2.6vw] items-center justify-center bg-transparent text-white"
-              >
-                to next
-              </motion.div>
-              <motion.div
-                variants={nextVars}
-                initial="initial"
-                whileHover={{ scale: 1.4 }}
-                onClick={decreaseIndex}
-                className="relative float-left flex h-40 w-[2.6vw] items-center justify-center bg-transparent text-white"
-              >
-                to prev
-              </motion.div>
-            </div>
             <Row
               variants={rowVars}
               initial="hidden"
               animate="visible"
+              custom={customValue.direction}
               exit="exit"
               key={index}
               transition={{ type: "tween", duration: 1 }}
@@ -183,6 +165,26 @@ const Home: NextPage = () => {
                 ))}
             </Row>
           </AnimatePresence>
+          <div>
+            <motion.div
+              variants={dirVars}
+              initial="initial"
+              whileHover={{ scale: 1.4 }}
+              onClick={increaseIndex}
+              className="relative float-right flex h-40 w-[2.6vw] items-center justify-center bg-transparent text-white"
+            >
+              to next
+            </motion.div>
+            <motion.div
+              variants={dirVars}
+              initial="initial"
+              whileHover={{ scale: 1.4 }}
+              onClick={decreaseIndex}
+              className="relative float-left flex h-40 w-[2.6vw] items-center justify-center bg-transparent text-white"
+            >
+              to prev
+            </motion.div>
+          </div>
         </Slider>
       </div>
     </div>
