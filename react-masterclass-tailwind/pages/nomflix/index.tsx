@@ -14,7 +14,7 @@ const Banner = styled.div<{ bgPhoto: string }>`
 const Slider = styled.div``;
 const Row = styled(motion.div)``;
 const Box = styled(motion.div)<{ bgPhoto: string }>`
-  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0)),
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0)),
     url(${(props) => props.bgPhoto});
 `;
 
@@ -28,6 +28,23 @@ const rowVars = {
   // exit: {
   //   x: -window.outerWidth - 155,
   // },
+};
+
+const boxVars = {
+  normal: {
+    scale: 1,
+    transition: {
+      type: "tween",
+    },
+  },
+  hover: {
+    scale: 1.3,
+    y: -50,
+    transition: {
+      delay: 0.3,
+      type: "tween",
+    },
+  },
 };
 
 const offset = 6;
@@ -51,7 +68,7 @@ const Home: NextPage = () => {
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const [leaving, setLeaving] = useState(false);
   return (
-    <div className="w-full ">
+    <div className="w-full overflow-x-hidden ">
       <Header />
       <div id="wraper" className="h-[200vh] bg-black  ">
         {isLoading ? (
@@ -96,12 +113,14 @@ const Home: NextPage = () => {
                 .slice(offset * index, offset * index + offset)
                 .map((movie) => (
                   <Box
-                    className="h-52 bg-white bg-cover bg-[center_center] text-3xl text-red-500 "
+                    className="h-40 bg-white bg-cover bg-[center_center] text-3xl text-red-500 
+                    first:origin-[center_left] last:origin-[center_right]"
                     key={movie.id}
+                    variants={boxVars}
+                    whileHover="hover"
+                    initial="normal"
                     bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
-                  >
-                    {/* {movie.title}{" "} */}
-                  </Box>
+                  ></Box>
                 ))}
             </Row>
           </AnimatePresence>
