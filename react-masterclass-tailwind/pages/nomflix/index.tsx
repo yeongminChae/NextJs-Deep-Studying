@@ -13,7 +13,10 @@ const Banner = styled.div<{ bgPhoto: string }>`
 `;
 const Slider = styled.div``;
 const Row = styled(motion.div)``;
-const Box = styled(motion.div)``;
+const Box = styled(motion.div)<{ bgPhoto: string }>`
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0)),
+    url(${(props) => props.bgPhoto});
+`;
 
 const rowVars = {
   // hidden: {
@@ -27,16 +30,26 @@ const rowVars = {
   // },
 };
 
+const offset = 6;
+
 const Home: NextPage = () => {
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
     getMovies
   );
   const [index, setIndex] = useState(0);
-  const increaseIndex = () => setIndex((prev) => prev + 1);
-  if (typeof window !== "undefined") {
-    console.log(window.outerWidth);
-  }
+  const increaseIndex = () => {
+    if (data) {
+      if (leaving) return;
+      toggleLeaving();
+      const totalMovies = data?.results.length - 1;
+      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      // index = page
+      setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+    }
+  };
+  const toggleLeaving = () => setLeaving((prev) => !prev);
+  const [leaving, setLeaving] = useState(false);
   return (
     <div className="w-full ">
       <Header />
@@ -51,7 +64,7 @@ const Home: NextPage = () => {
         ) : (
           <Banner
             onClick={increaseIndex}
-            bgPhoto={makeImagePath(data?.results[5].backdrop_path || "")}
+            bgPhoto={makeImagePath(data?.results[17].backdrop_path || "")}
             className="flex h-[100vh] flex-col justify-center bg-cover p-10 "
           >
             <div id="title" className="mb-4 text-4xl text-white">
@@ -64,7 +77,7 @@ const Home: NextPage = () => {
           </Banner>
         )}{" "}
         <Slider className="relative -mt-20">
-          <AnimatePresence>
+          <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
             <Row
               variants={rowVars}
               initial={{
@@ -78,11 +91,18 @@ const Home: NextPage = () => {
               transition={{ type: "tween", duration: 1 }}
               className="absolute mb-1 grid w-full grid-cols-6 gap-2"
             >
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <Box className="h-52 bg-white text-3xl text-red-500  " key={i}>
-                  {i}{" "}
-                </Box>
-              ))}
+              {data?.results
+                .slice(1)
+                .slice(offset * index, offset * index + offset)
+                .map((movie) => (
+                  <Box
+                    className="h-52 bg-white bg-cover bg-[center_center] text-3xl text-red-500 "
+                    key={movie.id}
+                    bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
+                  >
+                    {/* {movie.title}{" "} */}
+                  </Box>
+                ))}
             </Row>
           </AnimatePresence>
         </Slider>
