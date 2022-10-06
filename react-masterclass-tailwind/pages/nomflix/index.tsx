@@ -6,6 +6,8 @@ import { getMovies, IGetMoviesResult } from "../api";
 import Header from "./Components/Header";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useHistory, useRouteMatch } from "react-router-dom";
+import { useRouter } from "next/router";
 
 const Banner = styled.div<{ bgPhoto: string }>`
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
@@ -67,6 +69,7 @@ const dirVars = {
 const offset = 6;
 
 const Home: NextPage = () => {
+  const router = useRouter();
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
     getMovies
@@ -96,12 +99,15 @@ const Home: NextPage = () => {
   const customValue = {
     direction: back,
   };
-  const toggleLeaving = () => setLeaving((prev) => !prev);
   const [leaving, setLeaving] = useState(false);
+  const toggleLeaving = () => setLeaving((prev) => !prev);
+  const onBoxClick = (movieId: number) => {
+    router.push(`/nomflix/${movieId} `);
+  };
   return (
-    <div className="w-full overflow-x-hidden ">
+    <div className="absolute overflow-x-hidden ">
       <Header />
-      <div id="wraper" className="h-[200vh] bg-black  ">
+      <div id="wraper" className=" h-[200vh] w-full overflow-x-hidden bg-black">
         {isLoading ? (
           <div
             id="loader"
@@ -111,8 +117,8 @@ const Home: NextPage = () => {
           </div>
         ) : (
           <Banner
-            bgPhoto={makeImagePath(data?.results[17].backdrop_path || "")}
-            className="flex h-[100vh] flex-col justify-center bg-cover p-10 "
+            bgPhoto={makeImagePath(data?.results[0].backdrop_path || "")}
+            className="flex h-[100vh] w-full flex-col justify-center bg-cover p-10 "
           >
             <div id="title" className="mb-4 text-4xl text-white">
               {" "}
@@ -145,9 +151,12 @@ const Home: NextPage = () => {
                 .slice(offset * index, offset * index + offset)
                 .map((movie) => (
                   <Box
-                    className="h-40 bg-white bg-cover bg-[center_center] text-3xl text-red-500 
-                    first:origin-[center_left] last:origin-[center_right]"
+                    className="h-40 cursor-pointer bg-white bg-cover bg-[center_center] text-3xl 
+                    text-red-500 first:origin-[center_left] last:origin-[center_right]"
                     key={movie.id}
+                    // layoutId={movie.id + ""}
+                    layoutId="movie"
+                    onClick={() => onBoxClick(movie.id)} // this is anomynous function , for sending the argument to onBocClicked function
                     variants={boxVars}
                     initial="normal"
                     whileHover="hover"
@@ -173,7 +182,20 @@ const Home: NextPage = () => {
               onClick={increaseIndex}
               className="relative float-right flex h-40 w-[2.6vw] items-center justify-center bg-transparent text-white"
             >
-              to next
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="h-6 w-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                />
+              </svg>
             </motion.div>
             <motion.div
               variants={dirVars}
@@ -182,10 +204,29 @@ const Home: NextPage = () => {
               onClick={decreaseIndex}
               className="relative float-left flex h-40 w-[2.6vw] items-center justify-center bg-transparent text-white"
             >
-              to prev
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="h-6 w-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 19.5L8.25 12l7.5-7.5"
+                />
+              </svg>
             </motion.div>
           </div>
         </Slider>
+        <AnimatePresence>
+          <motion.div
+            layoutId="movie"
+            // className="absolute top-10 left-0 right-0 m-auto h-[80vh] w-[40vw] bg-red-200 "
+          />
+        </AnimatePresence>
       </div>
     </div>
   );
