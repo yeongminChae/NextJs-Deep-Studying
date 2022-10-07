@@ -8,6 +8,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import { useRouter } from "next/router";
+import ModalBase from "./Components/ModalBase";
+import CardModal from "./Components/CardModal";
 
 const Banner = styled.div<{ bgPhoto: string }>`
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
@@ -70,6 +72,7 @@ const offset = 6;
 
 const Home: NextPage = () => {
   const router = useRouter();
+  console.log(router.pathname);
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
     getMovies
@@ -101,11 +104,25 @@ const Home: NextPage = () => {
   };
   const [leaving, setLeaving] = useState(false);
   const toggleLeaving = () => setLeaving((prev) => !prev);
-  const onBoxClick = (movieId: number) => {
-    router.push(`/nomflix/${movieId} `);
+  // const onBoxClick = (movieId: number, title: string) => {
+  //   router.push(
+  //     {
+  //       pathname: `/nomflix/${movieId} `,
+  //       query: { title },
+  //     },
+  //     `/nomflix/${movieId} `
+  //   );
+  // };
+  const [isActive, setIsActive] = useState(false);
+  const onClickModalOn = (movieId: number) => {
+    setIsActive(true);
+    // console.log(movieId);
+  };
+  const onClickModalOff = () => {
+    setIsActive(false);
   };
   return (
-    <div className="absolute overflow-x-hidden ">
+    <div className="absolute overflow-hidden ">
       <Header />
       <div id="wraper" className=" h-[200vh] w-full overflow-x-hidden bg-black">
         {isLoading ? (
@@ -154,9 +171,9 @@ const Home: NextPage = () => {
                     className="h-40 cursor-pointer bg-white bg-cover bg-[center_center] text-3xl 
                     text-red-500 first:origin-[center_left] last:origin-[center_right]"
                     key={movie.id}
-                    // layoutId={movie.id + ""}
-                    layoutId="movie"
-                    onClick={() => onBoxClick(movie.id)} // this is anomynous function , for sending the argument to onBocClicked function
+                    layoutId={movie.id + ""}
+                    // layoutId="movie"
+                    onClick={() => onClickModalOn(movie.id)}
                     variants={boxVars}
                     initial="normal"
                     whileHover="hover"
@@ -223,9 +240,11 @@ const Home: NextPage = () => {
         </Slider>
         <AnimatePresence>
           <motion.div
-            layoutId="movie"
-            // className="absolute top-10 left-0 right-0 m-auto h-[80vh] w-[40vw] bg-red-200 "
+          // layoutId="movie"
           />
+          <ModalBase active={isActive} closeEvent={onClickModalOff}>
+            <CardModal closeEvent={onClickModalOff} />
+          </ModalBase>
         </AnimatePresence>
       </div>
     </div>
