@@ -32,7 +32,9 @@ const Header: NextPage = () => {
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
   const { scrollY } = useScroll();
-
+  const onLogoClick = () => {
+    router.push("/nomflix");
+  };
   const toggleSearch = () => {
     if (searchOpen) {
       inputAnimation.start({
@@ -63,12 +65,12 @@ const Header: NextPage = () => {
       // other way : animate={{backgroundColor:scrollY > 80 "rgba(0,0,0,0)" : "rgba(0,0,0,1)"}}
       initial="top"
       className={cls(
-        "font-xs fixed top-0 flex h-20 w-full items-center justify-between px-5 py-8 ",
+        "font-xs fixed top-0 z-10 flex h-20 w-full items-center justify-between px-5 py-8 ",
         scrollY.get() > 80 ? "shadow-2xl" : "shadow-none"
       )}
     >
       <div id="col" className="flex items-center">
-        <div id="logo" className="mr-12 ">
+        <div id="logo" className="mr-12 " onClick={onLogoClick}>
           <motion.svg
             variants={logoVars}
             initial="normal"

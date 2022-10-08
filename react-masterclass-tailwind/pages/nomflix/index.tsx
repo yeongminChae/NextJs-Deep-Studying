@@ -1,15 +1,20 @@
-import { useQuery } from "@tanstack/react-query";
+import { Query, useQuery } from "@tanstack/react-query";
 import type { NextPage } from "next";
 import styled from "styled-components";
-import { makeImagePath } from "../../libs/client/utils";
+import { cls, makeImagePath } from "../../libs/client/utils";
 import { getMovies, IGetMoviesResult } from "../api";
 import Header from "./Components/Header";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useAnimation,
+} from "framer-motion";
 import { useEffect, useState } from "react";
-import { useHistory, useRouteMatch } from "react-router-dom";
 import { useRouter } from "next/router";
-import ModalBase from "./Components/ModalBase";
-import CardModal from "./Components/CardModal";
+import Modal from "react-modal";
+
+Modal.setAppElement("#__next");
 
 const Banner = styled.div<{ bgPhoto: string }>`
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
@@ -72,7 +77,6 @@ const offset = 6;
 
 const Home: NextPage = () => {
   const router = useRouter();
-  console.log(router.pathname);
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
     getMovies
@@ -104,22 +108,13 @@ const Home: NextPage = () => {
   };
   const [leaving, setLeaving] = useState(false);
   const toggleLeaving = () => setLeaving((prev) => !prev);
-  // const onBoxClick = (movieId: number, title: string) => {
-  //   router.push(
-  //     {
-  //       pathname: `/nomflix/${movieId} `,
-  //       query: { title },
-  //     },
-  //     `/nomflix/${movieId} `
-  //   );
-  // };
-  const [isActive, setIsActive] = useState(false);
-  const onClickModalOn = (movieId: number) => {
-    setIsActive(true);
-    // console.log(movieId);
+  const onBoxClick = (movieId: number, title?: string) => {
+    router.push(`?movieId=${data}`, `/nomflix/${movieId} `);
   };
-  const onClickModalOff = () => {
-    setIsActive(false);
+  const modalStyles = {
+    overlay: {
+      backgroundColor: "#ffffff",
+    },
   };
   return (
     <div className="absolute overflow-hidden ">
@@ -146,7 +141,7 @@ const Home: NextPage = () => {
             </div>
           </Banner>
         )}{" "}
-        <Slider className=" -mt-20 ">
+        <Slider className="z-0 -mt-20">
           <AnimatePresence
             initial={false}
             onExitComplete={toggleLeaving}
@@ -172,8 +167,7 @@ const Home: NextPage = () => {
                     text-red-500 first:origin-[center_left] last:origin-[center_right]"
                     key={movie.id}
                     layoutId={movie.id + ""}
-                    // layoutId="movie"
-                    onClick={() => onClickModalOn(movie.id)}
+                    onClick={() => onBoxClick(movie.id)}
                     variants={boxVars}
                     initial="normal"
                     whileHover="hover"
@@ -239,12 +233,17 @@ const Home: NextPage = () => {
           </div>
         </Slider>
         <AnimatePresence>
-          <motion.div
-          // layoutId="movie"
-          />
-          <ModalBase active={isActive} closeEvent={onClickModalOff}>
-            <CardModal closeEvent={onClickModalOff} />
-          </ModalBase>
+          <motion.div className="bg-red-200">
+            <Modal
+              isOpen={!!router.query.movieId}
+              closeTimeoutMS={2000}
+              onRequestClose={() => router.push("/nomflix")}
+              style={modalStyles}
+              className="absolute top-24 left-0 right-0 z-[200] m-auto h-[80vh] w-[40vw] bg-black/30 shadow-xl outline-none transition-opacity"
+            >
+              <div>in the modal </div>
+            </Modal>
+          </motion.div>
         </AnimatePresence>
       </div>
     </div>
