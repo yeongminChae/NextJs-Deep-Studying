@@ -74,9 +74,9 @@ const dirVars = {
 };
 
 const offset = 6;
-
 const Home: NextPage = () => {
   const router = useRouter();
+  console.log(!!router.query.movieId);
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
     getMovies
@@ -108,13 +108,8 @@ const Home: NextPage = () => {
   };
   const [leaving, setLeaving] = useState(false);
   const toggleLeaving = () => setLeaving((prev) => !prev);
-  const onBoxClick = (movieId: number, title?: string) => {
+  const onBoxClick = (movieId: number) => {
     router.push(`?movieId=${data}`, `/nomflix/${movieId} `);
-  };
-  const modalStyles = {
-    overlay: {
-      backgroundColor: "#ffffff",
-    },
   };
   return (
     <div className="absolute overflow-hidden ">
@@ -233,15 +228,14 @@ const Home: NextPage = () => {
           </div>
         </Slider>
         <AnimatePresence>
-          <motion.div className="bg-red-200">
+          <motion.div layoutId={!!router.query.movieId + ""} className="">
             <Modal
               isOpen={!!router.query.movieId}
               closeTimeoutMS={2000}
               onRequestClose={() => router.push("/nomflix")}
-              style={modalStyles}
-              className="absolute top-24 left-0 right-0 z-[200] m-auto h-[80vh] w-[40vw] bg-black/30 shadow-xl outline-none transition-opacity"
+              className="absolute top-24 left-0 right-0 z-[100] m-auto h-[80vh] w-[40vw] bg-black shadow-xl outline-none "
             >
-              <div>in the modal </div>
+              <motion.div className="text-white ">in the modal </motion.div>
             </Modal>
           </motion.div>
         </AnimatePresence>
