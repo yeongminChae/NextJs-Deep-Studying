@@ -2,7 +2,7 @@ import { Query, useQuery } from "@tanstack/react-query";
 import type { NextPage } from "next";
 import styled from "styled-components";
 import { cls, makeImagePath } from "../../libs/client/utils";
-import { getMovies, IGetMoviesResult } from "../api";
+import { getMovies, IGetMoviesResult } from "../api/movieApi";
 import Header from "./Components/Header";
 import {
   motion,
@@ -13,6 +13,7 @@ import {
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Modal from "react-modal";
+import { appendFile } from "fs/promises";
 
 Modal.setAppElement("#__next");
 
@@ -74,9 +75,9 @@ const dirVars = {
 };
 
 const offset = 6;
+
 const Home: NextPage = () => {
   const router = useRouter();
-  console.log(!!router.query.movieId);
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
     getMovies
@@ -111,6 +112,16 @@ const Home: NextPage = () => {
   const onBoxClick = (movieId: number) => {
     router.push(`?movieId=${data}`, `/nomflix/${movieId} `);
   };
+
+  const abc: any = [];
+  {
+    data?.results.map((movie) => {
+      if (router.asPath === `/nomflix/${movie.id}`) {
+        abc.push(movie.id);
+      }
+    });
+  }
+
   return (
     <div className="absolute overflow-hidden ">
       <Header />
@@ -228,16 +239,20 @@ const Home: NextPage = () => {
           </div>
         </Slider>
         <AnimatePresence>
-          <motion.div layoutId={!!router.query.movieId + ""} className="">
-            <Modal
+          {router.asPath === `/nomflix/${abc[0]}` ? (
+            <motion.div
+              layoutId={abc[0] + ""}
+              className="absolute top-24 left-0 right-0 z-[100] m-auto h-[80vh] w-[40vw] bg-black shadow-xl outline-none "
+            />
+          ) : null}
+          {/* <Modal
               isOpen={!!router.query.movieId}
               closeTimeoutMS={2000}
               onRequestClose={() => router.push("/nomflix")}
               className="absolute top-24 left-0 right-0 z-[100] m-auto h-[80vh] w-[40vw] bg-black shadow-xl outline-none "
             >
               <motion.div className="text-white ">in the modal </motion.div>
-            </Modal>
-          </motion.div>
+            </Modal> */}
         </AnimatePresence>
       </div>
     </div>
