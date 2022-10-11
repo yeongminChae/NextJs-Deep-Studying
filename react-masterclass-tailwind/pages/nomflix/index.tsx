@@ -43,6 +43,15 @@ const Overlay = styled(motion.div)``;
 const Bigmovie = styled(motion.div)<{ scrollY: number }>`
   top: ${(props) => props.scrollY + 100}px;
 `;
+const BigCover = styled(motion.div)<{ bgPhoto?: string }>`
+  background-image: linear-gradient(to top, black, transparent),
+    url(${(props) => props.bgPhoto});
+`;
+
+const BigTitle = styled(motion.div)``;
+
+const BigOverview = styled(motion.div)``;
+
 const boxVars = {
   normal: {
     scale: 1,
@@ -117,11 +126,17 @@ const Home: NextPage = () => {
     router.push(`?movieId=${data}`, `/nomflix/${movieId} `);
   };
   const onOverlayClick = () => router.back();
-  const abc: any = [];
+  const moId: any = [];
+  const moTitile: any = [];
+  const moImg: any = [];
+  const moOverview: any = [];
   {
     data?.results.map((movie) => {
       if (router.asPath === `/nomflix/${movie.id}`) {
-        abc.push(movie.id);
+        moId.push(movie.id);
+        moTitile.push(movie.title);
+        moImg.push(movie.backdrop_path);
+        moOverview.push(movie.overview);
       }
     });
   }
@@ -243,7 +258,7 @@ const Home: NextPage = () => {
           </div>
         </Slider>
         <AnimatePresence>
-          {router.asPath === `/nomflix/${abc[0]}` ? (
+          {router.asPath === `/nomflix/${moId[0]}` ? (
             <div className="relative">
               <Overlay
                 onClick={onOverlayClick}
@@ -252,21 +267,26 @@ const Home: NextPage = () => {
                 className="fixed top-0 h-full w-full bg-[rgba(0,0,0,0.5)] opacity-0 "
               >
                 <Bigmovie
-                  layoutId={abc[0] + ""}
-                  className="relative left-0 right-0 z-[100] mx-auto h-[80vh] w-[40vw] snap-y bg-red-200 shadow-xl outline-none "
+                  layoutId={moId[0] + ""}
+                  className="absolute left-0 right-0 z-[100] mx-auto h-[90vh] w-[40vw] overflow-hidden rounded-lg bg-[#2F2F2F] shadow-xl outline-none "
                   scrollY={scrollY.get()}
-                />
+                >
+                  <>
+                    <BigCover
+                      bgPhoto={makeImagePath(moImg, "w500")}
+                      className="h-[350px] w-full bg-cover bg-[center_center] "
+                    />
+                    <BigTitle className="relative top-[-80px] p-5 text-lg text-[#fff]">
+                      {moTitile}{" "}
+                    </BigTitle>
+                    <BigOverview className="relative top-[-80px] p-5 text-[#fff] ">
+                      {moOverview}{" "}
+                    </BigOverview>
+                  </>
+                </Bigmovie>
               </Overlay>
             </div>
           ) : null}
-          {/* <Modal
-              isOpen={!!router.query.movieId}
-              closeTimeoutMS={2000}
-              onRequestClose={() => router.push("/nomflix")}
-              className="absolute top-24 left-0 right-0 z-[100] m-auto h-[80vh] w-[40vw] bg-black shadow-xl outline-none "
-            >
-              <motion.div className="text-white ">in the modal </motion.div>
-            </Modal> */}
         </AnimatePresence>
       </div>
     </div>
