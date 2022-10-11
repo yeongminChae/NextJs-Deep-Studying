@@ -1,4 +1,4 @@
-import { Query, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import type { NextPage } from "next";
 import styled from "styled-components";
 import { cls, makeImagePath } from "../../libs/client/utils";
@@ -9,11 +9,11 @@ import {
   AnimatePresence,
   useScroll,
   useAnimation,
+  useTransform,
 } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Modal from "react-modal";
-import { appendFile } from "fs/promises";
 
 Modal.setAppElement("#__next");
 
@@ -28,7 +28,6 @@ const Box = styled(motion.div)<{ bgPhoto: string }>`
     url(${(props) => props.bgPhoto});
 `;
 const Info = styled(motion.div)``;
-
 const rowVars = {
   hidden: (isBack: boolean) => ({
     x: isBack ? "-1440px" : "1440px",
@@ -40,7 +39,10 @@ const rowVars = {
     x: isBack ? "1440px" : "-1440px",
   }),
 };
-
+const Overlay = styled(motion.div)``;
+const Bigmovie = styled(motion.div)<{ scrollY: number }>`
+  top: ${(props) => props.scrollY + 100}px;
+`;
 const boxVars = {
   normal: {
     scale: 1,
@@ -82,6 +84,8 @@ const Home: NextPage = () => {
     ["movies", "nowPlaying"],
     getMovies
   );
+  const { scrollY } = useScroll();
+  // const setScrollY = useTransform(scrollY,(value) => value+50 )
   const [index, setIndex] = useState(0);
   const [back, setBack] = useState<boolean>(false);
   const increaseIndex = () => {
@@ -112,7 +116,7 @@ const Home: NextPage = () => {
   const onBoxClick = (movieId: number) => {
     router.push(`?movieId=${data}`, `/nomflix/${movieId} `);
   };
-
+  const onOverlayClick = () => router.back();
   const abc: any = [];
   {
     data?.results.map((movie) => {
@@ -123,7 +127,7 @@ const Home: NextPage = () => {
   }
 
   return (
-    <div className="absolute overflow-hidden ">
+    <div className="relative overflow-hidden ">
       <Header />
       <div id="wraper" className=" h-[200vh] w-full overflow-x-hidden bg-black">
         {isLoading ? (
@@ -240,10 +244,20 @@ const Home: NextPage = () => {
         </Slider>
         <AnimatePresence>
           {router.asPath === `/nomflix/${abc[0]}` ? (
-            <motion.div
-              layoutId={abc[0] + ""}
-              className="absolute top-24 left-0 right-0 z-[100] m-auto h-[80vh] w-[40vw] bg-black shadow-xl outline-none "
-            />
+            <div className="relative">
+              <Overlay
+                onClick={onOverlayClick}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed top-0 h-full w-full bg-[rgba(0,0,0,0.5)] opacity-0 "
+              >
+                <Bigmovie
+                  layoutId={abc[0] + ""}
+                  className="relative left-0 right-0 z-[100] mx-auto h-[80vh] w-[40vw] snap-y bg-red-200 shadow-xl outline-none "
+                  scrollY={scrollY.get()}
+                />
+              </Overlay>
+            </div>
           ) : null}
           {/* <Modal
               isOpen={!!router.query.movieId}
