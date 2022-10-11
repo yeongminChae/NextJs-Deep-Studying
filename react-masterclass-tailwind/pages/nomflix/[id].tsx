@@ -1,13 +1,14 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import Header from "./Components/Header";
 
 const MovieDetail: NextPage = () => {
   const router = useRouter();
 
   return (
-    <>
-      <div></div>
-    </>
+    <div>
+      <Header />
+    </div>
   );
 };
 // <motion.div  />

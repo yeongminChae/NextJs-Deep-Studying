@@ -126,6 +126,7 @@ const Home: NextPage = () => {
     router.push(`?movieId=${data}`, `/nomflix/${movieId} `);
   };
   const onOverlayClick = () => router.back();
+
   const moId: any = [];
   const moTitile: any = [];
   const moImg: any = [];

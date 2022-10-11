@@ -4,6 +4,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { cls } from "../../../libs/client/utils";
+import { useForm } from "react-hook-form";
+interface IForm {
+  keyword: string;
+}
 
 const logoVars = {
   normal: {
@@ -57,6 +61,10 @@ const Header: NextPage = () => {
       }
     });
   }, [navAnimation, scrollY]);
+  const { register, handleSubmit } = useForm<IForm>();
+  const onValid = (data: IForm) => {
+    router.push(`/nomflix/Search?keyword=${data.keyword} `);
+  };
   return (
     <motion.div
       id="nav"
@@ -117,7 +125,11 @@ const Header: NextPage = () => {
         </ul>
       </div>
       <div id="col" className="flex items-start justify-between ">
-        <span id="search" className="relative flex items-center text-white ">
+        <form
+          id="search"
+          onSubmit={handleSubmit(onValid)}
+          className="relative flex items-center text-white "
+        >
           <motion.svg
             onClick={toggleSearch}
             animate={{ x: searchOpen ? -180 : 0 }}
@@ -134,14 +146,15 @@ const Header: NextPage = () => {
             ></path>
           </motion.svg>
           <motion.input
+            {...register("keyword", { required: true, minLength: 2 })}
             animate={inputAnimation}
             initial={{ scaleX: 0 }}
             transition={{ type: "linear" }}
             id="Input"
             placeholder=" Search for ?"
-            className="white absolute -left-48 right-0 -z-[1] ml-2 flex origin-right items-center border border-[#fff] bg-transparent px-1 py-2 pl-8 text-base text-white/70 focus:border-[rgb(240,73,76)] focus:outline-none focus:ring-2 focus:ring-[rgb(242,115,117)] "
+            className="absolute -left-48 right-0 -z-[1] ml-2 flex origin-right items-center border border-[#fff] bg-transparent px-1 py-2 pl-8 text-base text-white text-white/70 focus:border-[rgb(240,73,76)] focus:outline-none focus:ring-2 focus:ring-[rgb(242,115,117)] "
           />
-        </span>
+        </form>
       </div>
     </motion.div>
   );
