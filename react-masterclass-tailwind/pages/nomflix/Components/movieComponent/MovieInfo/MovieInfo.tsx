@@ -6,22 +6,11 @@ import { makeImagePath } from "../../../../../libs/client/utils";
 import {
   getNowPalyingMovies,
   IGetMoviesResult,
-  getPopularMovies,
-  getTopRatedMovies,
-  getUpcomingMovies,
 } from "../../../../api/movieApi";
 
 export default function MovieInfo() {
   const router = useRouter();
   const { scrollY } = useScroll();
-  // const { data:nowPlayingData, isLoading:isnowPlayingLoading } = useQuery<IGetMoviesResult>(
-  //   ["movies", "nowPlaying"],
-  //   getNowPalyingMovies
-  // );
-  // const { data:LatestData, isLoading:isLatestLoading } = useQuery<IGetMoviesResult>(
-  //   ["movies", "Latest"],
-  //   getLatestMovies
-  // );
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
     getNowPalyingMovies

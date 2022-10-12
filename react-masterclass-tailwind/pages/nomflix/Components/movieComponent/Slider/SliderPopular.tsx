@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import styled from "styled-components";
 import { makeImagePath } from "../../../../../libs/client/utils";
-
 import { IGetMoviesResult, getPopularMovies } from "../../../../api/movieApi";
 
 interface ISlider {

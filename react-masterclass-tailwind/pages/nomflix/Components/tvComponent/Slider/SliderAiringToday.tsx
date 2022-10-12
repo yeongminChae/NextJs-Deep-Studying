@@ -4,40 +4,40 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import styled from "styled-components";
 import { makeImagePath } from "../../../../../libs/client/utils";
-import { IGetMoviesResult, getUpcomingMovies } from "../../../../api/movieApi";
+import { getAiringTodayTv, IGetTvResult } from "../../../../api/tvApi";
 
 interface ISlider {
   SliderTitle: string;
 }
 
-export default function SliderUpcoming({ SliderTitle }: ISlider) {
+export default function SliderAiringToday({ SliderTitle }: ISlider) {
   const router = useRouter();
   const [leaving, setLeaving] = useState(false);
   const [index, setIndex] = useState(0);
   const [back, setBack] = useState<boolean>(false);
-  const { data: UpcomingData, isLoading: UpcomingIsLoading } =
-    useQuery<IGetMoviesResult>(["movies", "Upcoming"], getUpcomingMovies);
-  const onBoxClick = (movieId: number) => {
-    router.push(`?movieId=${UpcomingData}`, `/nomflix/${movieId} `);
+  const { data: AiringTodayData, isLoading: AiringTodayIsLoading } =
+    useQuery<IGetTvResult>(["tvs", "AiringToday"], getAiringTodayTv);
+  const onBoxClick = (tvId: number) => {
+    router.push(`?tvId=${AiringTodayData}`, `/nomflix/${tvId} `);
   };
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const increaseIndex = () => {
-    if (UpcomingData) {
+    if (AiringTodayData) {
       if (leaving) return;
       toggleLeaving();
       setBack(false);
-      const totalMovies = UpcomingData?.results.length - 1;
-      const maxIndex = Math.floor(totalMovies / offset) - 1; // index = page
+      const totalTvs = AiringTodayData?.results.length - 1;
+      const maxIndex = Math.floor(totalTvs / offset) - 1; // index = page
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
     }
   };
   const decreaseIndex = () => {
-    if (UpcomingData) {
+    if (AiringTodayData) {
       if (leaving) return;
       toggleLeaving();
       setBack(true);
-      const totalMovies = UpcomingData?.results.length - 1;
-      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      const totalTvs = AiringTodayData?.results.length - 1;
+      const maxIndex = Math.floor(totalTvs / offset) - 1;
       setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
     }
   };
@@ -64,27 +64,27 @@ export default function SliderUpcoming({ SliderTitle }: ISlider) {
           transition={{ type: "tween", duration: 1 }}
           className="absolute mx-10 mb-1 grid w-[93.5vw] grid-cols-6 gap-2"
         >
-          {UpcomingData?.results
+          {AiringTodayData?.results
             .slice(1)
             .slice(offset * index, offset * index + offset)
-            .map((movie) => (
+            .map((tv) => (
               <Box
                 className="h-40 cursor-pointer bg-white bg-cover bg-[center_center] text-3xl 
             text-red-500 first:origin-[center_left] last:origin-[center_right]"
-                key={movie.id}
-                layoutId={movie.id + ""}
-                onClick={() => onBoxClick(movie.id)}
+                key={tv.id}
+                layoutId={tv.id + ""}
+                onClick={() => onBoxClick(tv.id)}
                 variants={boxVars}
                 initial="normal"
                 whileHover="hover"
-                bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
+                bgPhoto={makeImagePath(tv.backdrop_path, "w500")}
               >
                 <Info
                   variants={infoVars}
                   className="absolute bottom-0 w-full bg-black/60 p-3 opacity-0"
                 >
                   <div className="text-center text-lg text-white">
-                    {movie.title}
+                    {tv.name}
                   </div>
                 </Info>
               </Box>

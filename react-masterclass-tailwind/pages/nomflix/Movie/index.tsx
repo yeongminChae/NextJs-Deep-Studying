@@ -49,16 +49,16 @@ const Movie: NextPage = () => {
         ) : (
           <Banner
             bgPhoto={makeImagePath(
-              nowPlayingData?.results[0].backdrop_path || ""
+              top_ratedData?.results[1].backdrop_path || ""
             )}
             className="flex h-[100vh] w-full flex-col justify-center bg-cover p-10 "
           >
             <div id="title" className="mb-4 text-4xl text-white">
               {" "}
-              {nowPlayingData?.results[0].title}{" "}
+              {top_ratedData?.results[1].title}{" "}
             </div>
             <div id="overview" className="w-1/2 text-base text-white ">
-              {nowPlayingData?.results[0].overview}{" "}
+              {top_ratedData?.results[1].overview}{" "}
             </div>
           </Banner>
         )}{" "}
