@@ -114,6 +114,18 @@ const Header: NextPage = () => {
             id="item"
             className="relative mr-5 flex flex-col items-center justify-center text-[#fff] transition delay-150 ease-in-out hover:text-[#e5e5e5] "
           >
+            <Link href="/nomflix/Movie">Movie</Link>
+            {router.pathname == "/nomflix/Movie" && (
+              <motion.span
+                layoutId="circle"
+                className="absolute bottom-[-15px] my-auto mx-0 h-2 w-2 rounded-full bg-[#E51013] "
+              />
+            )}
+          </li>
+          <li
+            id="item"
+            className="relative mr-5 flex flex-col items-center justify-center text-[#fff] transition delay-150 ease-in-out hover:text-[#e5e5e5] "
+          >
             <Link href="/nomflix/Tv">tv Show</Link>
             {router.pathname == "/nomflix/Tv" && (
               <motion.span

@@ -1,40 +1,42 @@
-import { useQuery } from "@tanstack/react-query";
+import { Query, useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import styled from "styled-components";
-import { makeImagePath } from "../../../libs/client/utils";
-import { getMovies, IGetMoviesResult } from "../../api/movieApi";
+import { makeImagePath } from "../../../../../libs/client/utils";
+import { IGetMoviesResult, getTopRatedMovies } from "../../../../api/movieApi";
 
-export default function SliderAni({}) {
+interface ISlider {
+  SliderTitle: string;
+}
+
+export default function SliderTopRated({ SliderTitle }: ISlider) {
   const router = useRouter();
   const [leaving, setLeaving] = useState(false);
   const [index, setIndex] = useState(0);
   const [back, setBack] = useState<boolean>(false);
-  const { data, isLoading } = useQuery<IGetMoviesResult>(
-    ["movies", "nowPlaying"],
-    getMovies
-  );
+  const { data: top_ratedData, isLoading: top_ratedIsLoading } =
+    useQuery<IGetMoviesResult>(["movies", "TopRated"], getTopRatedMovies);
   const onBoxClick = (movieId: number) => {
-    router.push(`?movieId=${data}`, `/nomflix/${movieId} `);
+    router.push(`?movieId=${top_ratedData}`, `/nomflix/${movieId} `);
   };
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const increaseIndex = () => {
-    if (data) {
+    if (top_ratedData) {
       if (leaving) return;
       toggleLeaving();
       setBack(false);
-      const totalMovies = data?.results.length - 1;
+      const totalMovies = top_ratedData?.results.length - 1;
       const maxIndex = Math.floor(totalMovies / offset) - 1; // index = page
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
     }
   };
   const decreaseIndex = () => {
-    if (data) {
+    if (top_ratedData) {
       if (leaving) return;
       toggleLeaving();
       setBack(true);
-      const totalMovies = data?.results.length - 1;
+      const totalMovies = top_ratedData?.results.length - 1;
       const maxIndex = Math.floor(totalMovies / offset) - 1;
       setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
     }
@@ -44,7 +46,8 @@ export default function SliderAni({}) {
     direction: back,
   };
   return (
-    <Slider className="z-0 -mt-20">
+    <Slider className="z-0 -mt-20 ">
+      <div className="mx-10 mb-2 text-xl text-white/90 ">{SliderTitle}</div>
       <AnimatePresence
         initial={false}
         onExitComplete={toggleLeaving}
@@ -61,7 +64,7 @@ export default function SliderAni({}) {
           transition={{ type: "tween", duration: 1 }}
           className="absolute mx-10 mb-1 grid w-[93.5vw] grid-cols-6 gap-2"
         >
-          {data?.results
+          {top_ratedData?.results
             .slice(1)
             .slice(offset * index, offset * index + offset)
             .map((movie) => (

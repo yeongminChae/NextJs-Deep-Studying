@@ -1,25 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
 import type { NextPage } from "next";
 import styled from "styled-components";
-import { cls, makeImagePath } from "../../libs/client/utils";
 import {
-  getPopularMovies,
   getNowPalyingMovies,
+  getPopularMovies,
   getTopRatedMovies,
   getUpcomingMovies,
   IGetMoviesResult,
-} from "../api/movieApi";
-import Header from "./Components/Header";
-import MovieInfo from "./Components/movieComponent/MovieInfo/MovieInfo";
-import SliderTopRated from "./Components/movieComponent/Slider/SliderTopRated";
-import SliderPopular from "./Components/movieComponent/Slider/SliderPopular";
+} from "../../api/movieApi";
+import Header from "../Components/Header";
+import { makeImagePath } from "../../../libs/client/utils";
+import MovieInfo from "../Components/movieComponent/MovieInfo/MovieInfo";
+import SliderTopRated from "../Components/movieComponent/Slider/SliderTopRated";
+import SliderPopular from "../Components/movieComponent/Slider/SliderPopular";
+import SliderUpcoming from "../Components/movieComponent/Slider/SliderUpcoming";
+import SliderNowPlaying from "../Components/movieComponent/Slider/SliderNowPlaying";
 
 const Banner = styled.div<{ bgPhoto: string }>`
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
     url(${(props) => props.bgPhoto});
 `;
 
-const Home: NextPage = () => {
+const Movie: NextPage = () => {
   const { data: nowPlayingData, isLoading: nowPlayingIsLoading } =
     useQuery<IGetMoviesResult>(["movies", "nowPlaying"], getNowPalyingMovies);
   const { data: popularData, isLoading: latestIsLoading } =
@@ -34,9 +36,9 @@ const Home: NextPage = () => {
     top_ratedIsLoading &&
     UpcomingIsLoading;
   return (
-    <div className="relative overflow-hidden ">
+    <div className="absolute overflow-hidden ">
       <Header />
-      <div id="wraper" className=" h-[200vh] w-full overflow-x-hidden bg-black">
+      <div id="wraper" className=" h-[245vh] w-full overflow-x-hidden bg-black">
         {isLoading ? (
           <div
             id="loader"
@@ -47,16 +49,16 @@ const Home: NextPage = () => {
         ) : (
           <Banner
             bgPhoto={makeImagePath(
-              top_ratedData?.results[0].backdrop_path || ""
+              nowPlayingData?.results[0].backdrop_path || ""
             )}
             className="flex h-[100vh] w-full flex-col justify-center bg-cover p-10 "
           >
             <div id="title" className="mb-4 text-4xl text-white">
               {" "}
-              {top_ratedData?.results[0].title}{" "}
+              {nowPlayingData?.results[0].title}{" "}
             </div>
             <div id="overview" className="w-1/2 text-base text-white ">
-              {top_ratedData?.results[0].overview}{" "}
+              {nowPlayingData?.results[0].overview}{" "}
             </div>
           </Banner>
         )}{" "}
@@ -64,7 +66,13 @@ const Home: NextPage = () => {
           <SliderTopRated SliderTitle="Top Rated Movies" />
         </div>
         <div className="my-[300px] ">
+          <SliderNowPlaying SliderTitle="Now Palying Movies" />
+        </div>
+        <div className="my-[300px] ">
           <SliderPopular SliderTitle="Popular Movies" />
+        </div>
+        <div className="my-[300px] ">
+          <SliderUpcoming SliderTitle="Upcoming Movies" />
         </div>
         <MovieInfo />
       </div>
@@ -72,6 +80,6 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default Movie;
 // cp -r pages/nomflix ../../portfolio/my-portfolio-app/pages/cloneCoding/
 // for copying

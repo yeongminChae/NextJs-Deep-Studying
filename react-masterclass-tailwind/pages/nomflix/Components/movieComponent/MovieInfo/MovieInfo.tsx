@@ -2,15 +2,29 @@ import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import { makeImagePath } from "../../../libs/client/utils";
-import { getMovies, IGetMoviesResult } from "../../api/movieApi";
+import { makeImagePath } from "../../../../../libs/client/utils";
+import {
+  getNowPalyingMovies,
+  IGetMoviesResult,
+  getPopularMovies,
+  getTopRatedMovies,
+  getUpcomingMovies,
+} from "../../../../api/movieApi";
 
 export default function MovieInfo() {
   const router = useRouter();
   const { scrollY } = useScroll();
+  // const { data:nowPlayingData, isLoading:isnowPlayingLoading } = useQuery<IGetMoviesResult>(
+  //   ["movies", "nowPlaying"],
+  //   getNowPalyingMovies
+  // );
+  // const { data:LatestData, isLoading:isLatestLoading } = useQuery<IGetMoviesResult>(
+  //   ["movies", "Latest"],
+  //   getLatestMovies
+  // );
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
-    getMovies
+    getNowPalyingMovies
   );
   const moId: any = [];
   const moTitile: any = [];
