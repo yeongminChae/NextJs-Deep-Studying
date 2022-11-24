@@ -2,8 +2,11 @@ const API_KEY = process.env.API_KEY;
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   swcMinify: true,
+  compiler: {
+    styledComponents: true,
+  },
   async rewrites() {
     return [
       {
@@ -18,4 +21,9 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = {
+  nextConfig,
+  experimental: {
+    scrollRestoration: true,
+  },
+};
