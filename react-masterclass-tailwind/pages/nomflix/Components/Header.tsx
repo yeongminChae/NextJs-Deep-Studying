@@ -37,7 +37,7 @@ const Header: NextPage = () => {
   const navAnimation = useAnimation();
   const { scrollY } = useScroll();
   const onLogoClick = () => {
-    router.push("/nomflix");
+    router.push("/");
   };
   const toggleSearch = () => {
     if (searchOpen) {
@@ -51,7 +51,6 @@ const Header: NextPage = () => {
     }
     setSearchOpen((prev) => !prev);
   };
-
   useEffect(() => {
     scrollY.onChange(() => {
       if (scrollY.get() > 80) {
@@ -63,7 +62,14 @@ const Header: NextPage = () => {
   }, [navAnimation, scrollY]);
   const { register, handleSubmit } = useForm<IForm>();
   const onValid = (data: IForm) => {
-    router.push(`/nomflix/Search?keyword=${data.keyword} `);
+    if (router.pathname == "/nomflix/Movie") {
+      router.push(`/nomflix/Search/?category=movies&keyword=${data.keyword}`);
+    } else if (router.pathname == "/nomflix/Tv") {
+      router.push(`/nomflix/Search/?category=tvs&keyword=${data.keyword}`);
+    } else {
+      router.push(`/nomflix/Search/?category=movies&keyword=${data.keyword}`),
+        router.push(`/nomflix/Search/?category=tvs&keyword=${data.keyword}`);
+    }
   };
   return (
     <motion.div
@@ -102,7 +108,7 @@ const Header: NextPage = () => {
             id="item"
             className="relative mr-5 flex flex-col items-center justify-center text-[#fff] transition delay-150 ease-in-out hover:text-[#e5e5e5] "
           >
-            <Link href="/nomflix">Home</Link>
+            <Link href="/">Home</Link>
             {router.pathname == "/nomflix" && (
               <motion.span
                 layoutId="circle"

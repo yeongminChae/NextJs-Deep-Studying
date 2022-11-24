@@ -3,77 +3,79 @@ import type { NextPage } from "next";
 import styled from "styled-components";
 import { makeImagePath } from "../../../libs/client/utils";
 import Header from "../Components/Header";
-import {
-  getAiringTodayTv,
-  getOnTheAirTv,
-  getPopularTv,
-  getTopRatedTv,
-  IGetTvResult,
-} from "../../api/tvApi";
-import SliderAiringToday from "../Components/tvComponent/Slider/SliderAiringToday";
-import SliderOnTheAir from "../Components/tvComponent/Slider/SliderOnTheAir";
-import SliderPopularTv from "../Components/tvComponent/Slider/SliderPopularTv";
-import SliderTopRatedTv from "../Components/tvComponent/Slider/SliderTopRatedTv";
+import { useEffect, useState } from "react";
+import { getTvShows, ITvShows, TypeShows } from "../../api/Api";
+import TvSlider from "../Components/tvComponent/Slider/TvSlider";
 
 const Banner = styled.div<{ bgPhoto: string }>`
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
     url(${(props) => props.bgPhoto});
 `;
 
-const Tv: NextPage = () => {
-  const { data: AiringTodayData, isLoading: AiringTodayIsLoading } =
-    useQuery<IGetTvResult>(["tvs", "AiringToday"], getAiringTodayTv);
-  const { data: popularTvData, isLoading: popularTvIsLoading } =
-    useQuery<IGetTvResult>(["tvs", "popularTv"], getPopularTv);
-  const { data: top_ratedTvData, isLoading: top_ratedTvIsLoading } =
-    useQuery<IGetTvResult>(["tvs", "TopRatedTv"], getTopRatedTv);
-  const { data: OnTheAirData, isLoading: OnTheAirIsLoading } =
-    useQuery<IGetTvResult>(["tvs", "OnTheAir"], getOnTheAirTv);
-  const isLoading =
-    AiringTodayIsLoading &&
-    popularTvIsLoading &&
-    top_ratedTvIsLoading &&
-    OnTheAirIsLoading;
+const Tv = () => {
+  const { data, isLoading } = useQuery<ITvShows>(["tvs", "on_the_air"], () =>
+    getTvShows(TypeShows.on_the_air)
+  );
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   return (
-    <div className="relative overflow-hidden ">
-      <Header />
-      <div id="wraper" className=" h-[245vh] w-full overflow-x-hidden bg-black">
-        {isLoading ? (
-          <div
-            id="loader"
-            className="flex h-[20vh] items-center justify-center  "
-          >
-            LOADING...{" "}
+    mounted && (
+      <div className="absolute overflow-hidden ">
+        <Header />
+        <div
+          id="wraper"
+          className=" h-[245vh] w-full overflow-hidden overflow-x-hidden bg-black"
+        >
+          {isLoading ? (
+            <div
+              id="loader"
+              className="flex h-[20vh] items-center justify-center  "
+            >
+              LOADING...{" "}
+            </div>
+          ) : (
+            <Banner
+              bgPhoto={makeImagePath(data?.results[1].backdrop_path || "")}
+              className="flex h-[100vh] w-[99vw] flex-col justify-center bg-cover p-10 "
+            >
+              <div id="title" className="mb-4 text-4xl text-white">
+                {" "}
+                {data?.results[1].name}{" "}
+              </div>
+              <div id="overview" className="w-1/2 text-base text-white ">
+                {data?.results[1].overview}{" "}
+              </div>
+            </Banner>
+          )}
+          <div className="-mt-[200px] ">
+            <TvSlider
+              type={TypeShows.top_rated}
+              SliderTitle="Top Rated Tv Series"
+            />{" "}
           </div>
-        ) : (
-          <Banner
-            bgPhoto={makeImagePath(
-              top_ratedTvData?.results[1].backdrop_path || ""
-            )}
-            className="flex h-[100vh] w-full flex-col justify-center bg-cover p-10 "
-          >
-            <div id="title" className="mb-4 text-4xl text-white">
-              {top_ratedTvData?.results[1].name}{" "}
-            </div>
-            <div id="overview" className="w-1/2 text-base text-white ">
-              {top_ratedTvData?.results[1].overview}{" "}
-            </div>
-          </Banner>
-        )}
-        <div className="">
-          <SliderAiringToday SliderTitle="Airing Today Series " />
-        </div>
-        <div className="my-[300px] ">
-          <SliderOnTheAir SliderTitle="On The Air Series" />{" "}
-        </div>
-        <div className="my-[300px] ">
-          <SliderPopularTv SliderTitle="Popular Tv Series" />
-        </div>
-        <div className="my-[300px] ">
-          <SliderTopRatedTv SliderTitle="Top Rated Tv Series" />{" "}
+          <div className="my-[300px]">
+            <TvSlider
+              type={TypeShows.airing_today}
+              SliderTitle="On The Air Series"
+            />{" "}
+          </div>
+          <div className="my-[300px] ">
+            <TvSlider
+              type={TypeShows.popular}
+              SliderTitle="Popular Tv Series"
+            />
+          </div>
+          <div className="my-[300px] ">
+            <TvSlider
+              type={TypeShows.on_the_air}
+              SliderTitle="Airing Today Series "
+            />
+          </div>
         </div>
       </div>
-    </div>
+    )
   );
 };
 

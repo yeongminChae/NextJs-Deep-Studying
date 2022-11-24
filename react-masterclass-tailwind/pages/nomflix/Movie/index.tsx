@@ -1,82 +1,72 @@
 import { useQuery } from "@tanstack/react-query";
 import type { NextPage } from "next";
 import styled from "styled-components";
-import {
-  getNowPalyingMovies,
-  getPopularMovies,
-  getTopRatedMovies,
-  getUpcomingMovies,
-  IGetMoviesResult,
-} from "../../api/movieApi";
+import { getMovies, IGetMoviesResult, Types } from "../../api/Api";
 import Header from "../Components/Header";
 import { makeImagePath } from "../../../libs/client/utils";
-import MovieInfo from "../Components/movieComponent/MovieInfo/MovieInfo";
-import SliderTopRated from "../Components/movieComponent/Slider/SliderTopRated";
-import SliderPopular from "../Components/movieComponent/Slider/SliderPopular";
-import SliderUpcoming from "../Components/movieComponent/Slider/SliderUpcoming";
-import SliderNowPlaying from "../Components/movieComponent/Slider/SliderNowPlaying";
+import SliderNowPlaying from "../Components/movieComponent/Slider/MovieSlider";
+import { useEffect, useState } from "react";
+import MovieSlider from "../Components/movieComponent/Slider/MovieSlider";
 
 const Banner = styled.div<{ bgPhoto: string }>`
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
     url(${(props) => props.bgPhoto});
 `;
 
-const Movie: NextPage = () => {
-  const { data: nowPlayingData, isLoading: nowPlayingIsLoading } =
-    useQuery<IGetMoviesResult>(["movies", "nowPlaying"], getNowPalyingMovies);
-  const { data: popularData, isLoading: latestIsLoading } =
-    useQuery<IGetMoviesResult>(["movies", "Latest"], getPopularMovies);
-  const { data: top_ratedData, isLoading: top_ratedIsLoading } =
-    useQuery<IGetMoviesResult>(["movies", "TopRated"], getTopRatedMovies);
-  const { data: UpcomingData, isLoading: UpcomingIsLoading } =
-    useQuery<IGetMoviesResult>(["movies", "Upcoming"], getUpcomingMovies);
-  const isLoading =
-    nowPlayingIsLoading &&
-    latestIsLoading &&
-    top_ratedIsLoading &&
-    UpcomingIsLoading;
+const Movie = () => {
+  const { data, isLoading } = useQuery<IGetMoviesResult>(
+    ["movies", "nowPlaying"],
+    () => getMovies(Types.top_rated)
+  );
+  const bannerIndex = 0;
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   return (
-    <div className="absolute overflow-hidden ">
-      <Header />
-      <div id="wraper" className=" h-[245vh] w-full overflow-x-hidden bg-black">
-        {isLoading ? (
-          <div
-            id="loader"
-            className="flex h-[20vh] items-center justify-center  "
-          >
-            LOADING...{" "}
+    mounted && (
+      <div className="absolute overflow-hidden ">
+        <Header />
+        <div
+          id="wraper"
+          className=" h-[245vh] w-full overflow-hidden overflow-x-hidden bg-black"
+        >
+          {isLoading ? (
+            <div
+              id="loader"
+              className="flex h-[20vh] items-center justify-center  "
+            >
+              LOADING...{" "}
+            </div>
+          ) : (
+            <Banner
+              bgPhoto={makeImagePath(data?.results[1].backdrop_path || "")}
+              className="flex h-[100vh] w-full flex-col justify-center bg-cover p-10 "
+            >
+              <div id="title" className="mb-4 text-4xl text-white">
+                {" "}
+                {data?.results[1].title}{" "}
+              </div>
+              <div id="overview" className="w-1/2 text-base text-white ">
+                {data?.results[1].overview}{" "}
+              </div>
+            </Banner>
+          )}{" "}
+          <div key={"c"} className="">
+            <MovieSlider type={Types.top_rated} SliderTitle="Top Rated" />
           </div>
-        ) : (
-          <Banner
-            bgPhoto={makeImagePath(
-              top_ratedData?.results[1].backdrop_path || ""
-            )}
-            className="flex h-[100vh] w-full flex-col justify-center bg-cover p-10 "
-          >
-            <div id="title" className="mb-4 text-4xl text-white">
-              {" "}
-              {top_ratedData?.results[1].title}{" "}
-            </div>
-            <div id="overview" className="w-1/2 text-base text-white ">
-              {top_ratedData?.results[1].overview}{" "}
-            </div>
-          </Banner>
-        )}{" "}
-        <div className="">
-          <SliderTopRated SliderTitle="Top Rated Movies" />
+          <div key={"a"} className="my-[300px] ">
+            <MovieSlider type={Types.now_playing} SliderTitle="Now Playing" />
+          </div>
+          <div key={"b"} className="my-[300px] ">
+            <MovieSlider type={Types.popular} SliderTitle="Popular" />
+          </div>
+          <div key={"D"} className="my-[300px] ">
+            <MovieSlider type={Types.upcoming} SliderTitle="Upcoming" />
+          </div>
         </div>
-        <div className="my-[300px] ">
-          <SliderNowPlaying SliderTitle="Now Palying Movies" />
-        </div>
-        <div className="my-[300px] ">
-          <SliderPopular SliderTitle="Popular Movies" />
-        </div>
-        <div className="my-[300px] ">
-          <SliderUpcoming SliderTitle="Upcoming Movies" />
-        </div>
-        <MovieInfo />
       </div>
-    </div>
+    )
   );
 };
 
