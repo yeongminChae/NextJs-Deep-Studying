@@ -61,19 +61,19 @@ const Upload: NextPage = () => {
   }, [setPhotoPreview, photo]);
   return (
     <Layout seoTitle="Upload Product" canGoBack title="Upload Product">
-      <form className="p-4 space-y-4" onSubmit={handleSubmit(onValid)}>
+      <form className="space-y-4 p-4" onSubmit={handleSubmit(onValid)}>
         <div>
           {photoPreview ? (
             <div className="relative pb-80">
               <Image
                 src={photoPreview}
                 layout="fill"
-                className="object-cover bg-slate-300 "
+                className="bg-slate-300 object-cover "
                 alt=""
               />
             </div>
           ) : (
-            <label className="w-full cursor-pointer text-gray-600 hover:border-orange-500 hover:text-orange-500 flex items-center justify-center border-2 border-dashed border-gray-300 h-48 rounded-md">
+            <label className="flex h-48 w-full cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-gray-600 hover:border-orange-500 hover:text-orange-500">
               <svg
                 className="h-12 w-12"
                 stroke="currentColor"

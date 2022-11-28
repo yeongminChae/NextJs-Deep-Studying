@@ -20,7 +20,9 @@ interface ReviewsResponse {
 
 const Profile: NextPage = () => {
   const { user } = useUser();
-  const { data } = useSWR<ReviewsResponse>("/api/reviews");
+  const { data } = useSWR<ReviewsResponse>(
+    typeof window === "undefined" ? null : "/api/reviews"
+  );
   return (
     <Layout seoTitle="My Profile" hasTabBar title="My Profile">
       <div className="py-10 px-4">
@@ -30,16 +32,16 @@ const Profile: NextPage = () => {
               src={`https://imagedelivery.net/V_VgYLYXooAb_-AJyJfp_Q/${user?.avatar}/avatar`}
               width={48}
               height={48}
-              className="w-16 h-16 rounded-full"
+              className="h-16 w-16 rounded-full"
               alt=""
             />
           ) : (
-            <div className="w-16 h-16 bg-slate-500 rounded-full" />
+            <div className="h-16 w-16 rounded-full bg-slate-500" />
           )}
           <div className="flex flex-col">
             <span className="font-medium text-gray-900 ">{user?.name}</span>
             <Link href="/profile/edit">
-              <span className="text-sm text-gray-700 cursor-pointer ">
+              <span className="cursor-pointer text-sm text-gray-700 ">
                 Edit profile &rarr;
               </span>
             </Link>
@@ -47,10 +49,10 @@ const Profile: NextPage = () => {
         </div>
         <div className="mt-10 flex justify-around">
           <Link href="/profile/sold">
-            <div className="flex flex-col items-center cursor-pointer">
-              <div className="w-14 h-14 text-white hover:bg-orange-600 bg-orange-500 rounded-full flex items-center justify-center">
+            <div className="flex cursor-pointer flex-col items-center">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-orange-500 text-white hover:bg-orange-600">
                 <svg
-                  className="w-6 h-6"
+                  className="h-6 w-6"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -64,16 +66,16 @@ const Profile: NextPage = () => {
                   ></path>
                 </svg>
               </div>
-              <span className="text-sm font-medium text-gray-700 mt-2">
+              <span className="mt-2 text-sm font-medium text-gray-700">
                 판매내역
               </span>
             </div>
           </Link>
           <Link href="profile/bought">
-            <div className="flex flex-col items-center cursor-pointer">
-              <div className="w-14 h-14 text-white hover:bg-orange-600 bg-orange-500 rounded-full flex items-center justify-center">
+            <div className="flex cursor-pointer flex-col items-center">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-orange-500 text-white hover:bg-orange-600">
                 <svg
-                  className="w-6 h-6"
+                  className="h-6 w-6"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -87,16 +89,16 @@ const Profile: NextPage = () => {
                   ></path>
                 </svg>
               </div>
-              <span className="text-sm font-medium text-gray-700 mt-2">
+              <span className="mt-2 text-sm font-medium text-gray-700">
                 구매내역
               </span>
             </div>
           </Link>
           <Link href="profile/loved">
-            <div className="flex flex-col cursor-pointer items-center">
-              <div className="w-14 h-14 text-white hover:bg-orange-600 bg-orange-500 rounded-full flex items-center justify-center">
+            <div className="flex cursor-pointer flex-col items-center">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-orange-500 text-white hover:bg-orange-600">
                 <svg
-                  className="w-6 h-6"
+                  className="h-6 w-6"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -110,7 +112,7 @@ const Profile: NextPage = () => {
                   ></path>
                 </svg>
               </div>
-              <span className="text-sm font-medium text-gray-700 mt-2">
+              <span className="mt-2 text-sm font-medium text-gray-700">
                 관심목록
               </span>
             </div>
@@ -118,8 +120,8 @@ const Profile: NextPage = () => {
         </div>
         {data?.reviews.map((review) => (
           <div key={review.id} className="mt-12">
-            <div className="flex space-x-4 items-center">
-              <div className="w-12 h-12 rounded-full bg-slate-400 " />
+            <div className="flex items-center space-x-4">
+              <div className="h-12 w-12 rounded-full bg-slate-400 " />
               <div>
                 <h4 className="text-sm font-bold text-gray-800">
                   {review.createdBy.name}
@@ -145,7 +147,7 @@ const Profile: NextPage = () => {
                 </div>
               </div>
             </div>
-            <div className="mt-4 text-gray-600 text-sm">
+            <div className="mt-4 text-sm text-gray-600">
               <p>{review.review}</p>
             </div>
           </div>
