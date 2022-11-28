@@ -12,21 +12,10 @@ async function handler(
     body: { name, price, description },
   } = req;
   if (req.method === "POST") {
-    const stream = await client.stream.create({
-      data: {
-        name,
-        price,
-        description,
-        user: {
-          connect: {
-            id: user?.id,
-          },
-        },
-      },
-    });
+    // const stream = await client.stream.create();
     res.json({
       ok: true,
-      stream,
+      // stream,
     });
   }
   if (req.method === "GET") {

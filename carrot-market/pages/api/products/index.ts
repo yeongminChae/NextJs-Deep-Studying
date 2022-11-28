@@ -33,7 +33,7 @@ async function handler(
         price: +price,
         description,
         image: photoId,
-        User: {
+        user: {
           connect: {
             id: user?.id,
           },

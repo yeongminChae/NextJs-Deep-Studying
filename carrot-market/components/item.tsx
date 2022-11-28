@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image, { ImageLoaderProps } from "next/image";
 import Link from "next/link";
 
 interface ItemProps {
@@ -18,7 +18,7 @@ export default function Item({ title, price, hearts, id, image }: ItemProps) {
             {image ? (
               <Image
                 src={`https://imagedelivery.net/V_VgYLYXooAb_-AJyJfp_Q/${image}/product`}
-                alt={"items"}
+                alt={""}
                 layout="fill"
                 className="object-cover"
               />
