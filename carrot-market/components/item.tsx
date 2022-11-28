@@ -18,9 +18,9 @@ export default function Item({ title, price, hearts, id, image }: ItemProps) {
             {image ? (
               <Image
                 src={`https://imagedelivery.net/V_VgYLYXooAb_-AJyJfp_Q/${image}/product`}
-                alt="c''mon"
+                alt={"items"}
                 layout="fill"
-                objectFit="cover"
+                className="object-cover"
               />
             ) : (
               <div className="bg-slate-300 object-cover " />
