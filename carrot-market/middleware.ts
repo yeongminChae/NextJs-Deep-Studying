@@ -17,5 +17,5 @@ export function middleware(req: NextRequest, ev: NextFetchEvent) {
       NextResponse.redirect(`${req.nextUrl.origin}/enter`);
     }
   }
-  return NextResponse.next();
+  return NextResponse.redirect(req.nextUrl);
 }
