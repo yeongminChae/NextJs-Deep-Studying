@@ -16,7 +16,7 @@ async function handler(
       id: +id.toString(),
     },
     include: {
-      User: {
+      user: {
         select: {
           id: true,
           name: true,
@@ -25,7 +25,7 @@ async function handler(
       },
     },
   });
-  const terms = product?.name.split(" ").map((word) => ({
+  const terms = product?.name.split(" ").map((word: any) => ({
     name: {
       contains: word,
     },

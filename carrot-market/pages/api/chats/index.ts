@@ -80,14 +80,14 @@ async function handler(
         id: productId,
       },
       include: {
-        User: {
+        user: {
           select: {
             id: true,
           },
         },
       },
     });
-    if (product?.User.id === user?.id) {
+    if (product?.user.id === user?.id) {
       return res.json({
         ok: false,
         error: "You can't make chat room in your product",

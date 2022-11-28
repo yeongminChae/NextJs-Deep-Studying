@@ -185,7 +185,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
       id: +ctx.params.id.toString(),
     },
     include: {
-      User: {
+      user: {
         select: {
           id: true,
           name: true,
@@ -213,7 +213,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     await client.fav.findFirst({
       where: {
         productId: product?.id,
-        userId: product.User?.id,
+        userId: product.user?.id,
       },
       select: {
         id: true,
